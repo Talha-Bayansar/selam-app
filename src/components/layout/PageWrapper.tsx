@@ -9,7 +9,7 @@ export const PageWrapper = ({ title, ...props }: Props) => {
   return (
     <div className="flex flex-grow flex-col gap-8">
       <h1 className="text-4xl">{title}</h1>
-      <div {...props} className={cn("flex flex-col", props.className)}>
+      <div {...props} className={cn(props.className)}>
         {props.children}
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import { User, type LucideIcon, Users } from "lucide-react";
 import Link from "next/link";
-import { Card, CardContent, CardTitle, PageWrapper } from "~/components";
+import { Card, CardContent, PageWrapper } from "~/components";
 import { routes } from "~/lib";
 
 interface App {
