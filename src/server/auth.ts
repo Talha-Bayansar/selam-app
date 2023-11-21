@@ -7,7 +7,7 @@ import {
 import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "~/env.mjs";
-import { db } from "./db";
+import { type NextauthUsersRecord, db } from "./db";
 import { routes } from "~/lib";
 
 /**
@@ -20,6 +20,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      organisation?: { id: string };
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -38,13 +39,17 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: ({ session, user }) => {
+      const dbUser = user as NextauthUsersRecord;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+          organisation: dbUser.organisation,
+        },
+      };
+    },
   },
   pages: {
     signIn: routes.signIn,

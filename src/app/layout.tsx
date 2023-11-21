@@ -52,7 +52,7 @@ export default function RootLayout({
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           <NextAuthProvider>
-            <div className="flex min-h-screen w-screen flex-col p-4">
+            <div className="flex min-h-screen w-screen flex-col">
               {children}
             </div>
           </NextAuthProvider>
