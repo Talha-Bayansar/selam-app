@@ -12,6 +12,7 @@
   "dependencies": {
     "@auth/xata-adapter": "^0.1.3",
     "@ducanh2912/next-pwa": "^9.7.2",
+    "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@t3-oss/env-nextjs": "^0.7.0",
     "@tanstack/react-query": "^4.32.6",
@@ -22,6 +23,7 @@
     "@xata.io/client": "^0.27.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "date-fns": "^2.30.0",
     "lucide-react": "^0.292.0",
     "next": "^14.0.0",
     "next-auth": "^4.24.4",

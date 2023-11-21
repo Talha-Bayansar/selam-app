@@ -7,7 +7,7 @@ import {
 import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "~/env.mjs";
-import { type NextauthUsersRecord, db } from "./db";
+import { type NextauthUsersRecord, xata } from "./db";
 import { routes } from "~/lib";
 
 /**
@@ -54,7 +54,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: routes.signIn,
   },
-  adapter: XataAdapter(db),
+  adapter: XataAdapter(xata),
   secret: env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
