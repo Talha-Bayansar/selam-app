@@ -1,0 +1,13 @@
+{
+  "id": "mig_cl5pqq4e9a1piluukf00",
+  "parentID": "mig_cl5pp8se9a1piluukdt0",
+  "checksum": "1:4a5a2e03352905f91759c1f3d44d8c72ac5cabf5f76d705cd8716d3365c6988e",
+  "operations": [
+    {
+      "removeColumn": {
+        "column": "members",
+        "table": "groups"
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "mig_cl5pilhtregmc7qhqvdg",
+  "parentID": "mig_cl5pih4e9a1piluukc90",
+  "checksum": "1:772c9e4549e18fd7f7c981dcb41d884975a6f8663cea7171f4162ddea65ae9d7",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "lastName",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "Not specified"
+        },
+        "table": "members"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "mig_cl5pn18f2cdmm492g4d0",
+  "parentID": "mig_cl5pmmse9a1piluukdlg",
+  "checksum": "1:abf38760927c59871cbd66c42e5250507e88b0cbe5fd5296f223b3f054389276",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "name",
+          "type": "string",
+          "unique": true
+        },
+        "table": "genders"
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "databaseURL": "https://Talha-Bayansar-s-workspace-l2p3gj.eu-central-1.xata.sh/db/selam-db",
+  "codegen": {
+    "output": "src/server/db/xata.ts"
+  }
+}

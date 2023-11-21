@@ -1,0 +1,17 @@
+{
+  "id": "mig_cl5por4e9a1piluukdr0",
+  "parentID": "mig_cl5poi0f2cdmm492g4q0",
+  "checksum": "1:6083fea04729c79fa607cae758cd51eeeafed4780a9cf7725f5dcd24aa195e17",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "name",
+          "type": "string",
+          "unique": true
+        },
+        "table": "groups"
+      }
+    }
+  ]
+}

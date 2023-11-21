@@ -1,0 +1,16 @@
+{
+  "id": "mig_cl5pj41tregmc7qhqvjg",
+  "parentID": "mig_cl5pirof2cdmm492g3ng",
+  "checksum": "1:f8828c4e26b96a03dd9aa9ccafc0a1e0f7ca62a7b242d242786dd23374dc62dc",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "phoneNumber",
+          "type": "string"
+        },
+        "table": "members"
+      }
+    }
+  ]
+}

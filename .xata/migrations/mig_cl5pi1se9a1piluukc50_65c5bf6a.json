@@ -1,0 +1,12 @@
+{
+  "id": "mig_cl5pi1se9a1piluukc50",
+  "parentID": "mig_cl5pd91tregmc7qhqv9g",
+  "checksum": "1:65c5bf6ae310ca6f3c8b749b1ae48a853e9524aace1ff43db9850aaaef5e82ec",
+  "operations": [
+    {
+      "addTable": {
+        "table": "members"
+      }
+    }
+  ]
+}

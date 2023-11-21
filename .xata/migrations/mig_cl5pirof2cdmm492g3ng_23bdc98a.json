@@ -1,0 +1,16 @@
+{
+  "id": "mig_cl5pirof2cdmm492g3ng",
+  "parentID": "mig_cl5pilhtregmc7qhqvdg",
+  "checksum": "1:23bdc98ac25019c0f7a7e78d56257a1bb97c5ec209fdd8d590fcbc20634a4cf8",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "dateOfBirth",
+          "type": "datetime"
+        },
+        "table": "members"
+      }
+    }
+  ]
+}

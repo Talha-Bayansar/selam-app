@@ -1,0 +1,19 @@
+{
+  "id": "mig_cl5toq1tregmc7qhrffg",
+  "parentID": "mig_cl5ptgke9a1piluukfbg",
+  "checksum": "1:fa5281b3d96edf1c37661c907f1b2334f3cd19fe977f93b6739792d5bd543991",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "organisation",
+          "type": "link",
+          "link": {
+            "table": "organisations"
+          }
+        },
+        "table": "nextauth_users"
+      }
+    }
+  ]
+}

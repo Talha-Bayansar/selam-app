@@ -1,0 +1,19 @@
+{
+  "id": "mig_cl5psese9a1piluukf70",
+  "parentID": "mig_cl5psb0f2cdmm492g5bg",
+  "checksum": "1:c007b1c72c7e7cbdb1ac0899f10f45aa07c63e08ab8bc38ea88501fde248782e",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "member",
+          "type": "link",
+          "link": {
+            "table": "members"
+          }
+        },
+        "table": "organisations_members"
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "mig_cl5pnbke9a1piluukdmg",
+  "parentID": "mig_cl5pn18f2cdmm492g4d0",
+  "checksum": "1:b67e05cd246cac0f3941da1bc9d2c8af8d6f308aca213d9ab4c9add49f62c70f",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "gender",
+          "type": "link",
+          "link": {
+            "table": "genders"
+          }
+        },
+        "table": "members"
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "mig_cl5pslgf2cdmm492g5cg",
+  "parentID": "mig_cl5psice9a1piluukf80",
+  "checksum": "1:cc52b4f5470b2aed24ff93c171fb313c355da2a3034b134744211f29a0b0c5c0",
+  "operations": [
+    {
+      "renameTable": {
+        "newName": "organisations",
+        "oldName": "organizations"
+      }
+    }
+  ]
+}

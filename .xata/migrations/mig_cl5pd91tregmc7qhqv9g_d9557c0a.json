@@ -1,0 +1,16 @@
+{
+  "id": "mig_cl5pd91tregmc7qhqv9g",
+  "parentID": "mig_cl5pcu8f2cdmm492g38g",
+  "checksum": "1:d9557c0a8c4605514c1e4c40cccbd5b24d210c7c679717a5b2bb9db8c47b54c0",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "logo",
+          "type": "file"
+        },
+        "table": "organizations"
+      }
+    }
+  ]
+}

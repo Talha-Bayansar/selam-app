@@ -1,0 +1,12 @@
+{
+  "id": "mig_cl5unh1tregmc7qhrhng",
+  "parentID": "mig_cl5toq1tregmc7qhrffg",
+  "checksum": "1:bb1a107e8ff09dbbf9e133bde5b43e16ca40ac873f75b019e71a824cf8318dcf",
+  "operations": [
+    {
+      "removeTable": {
+        "table": "organisations_members"
+      }
+    }
+  ]
+}

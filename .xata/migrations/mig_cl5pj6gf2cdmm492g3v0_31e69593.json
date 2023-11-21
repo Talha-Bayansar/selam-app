@@ -1,0 +1,16 @@
+{
+  "id": "mig_cl5pj6gf2cdmm492g3v0",
+  "parentID": "mig_cl5pj41tregmc7qhqvjg",
+  "checksum": "1:31e69593893970b7624515abe249a8f5ad646470e04fc71e8bd4aab3d8395f63",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "address",
+          "type": "string"
+        },
+        "table": "members"
+      }
+    }
+  ]
+}
