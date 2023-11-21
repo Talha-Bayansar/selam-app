@@ -6,8 +6,8 @@ export const memberRouter = createTRPCRouter({
   getAll: protectedProcedure
     .input(
       z.object({
-        size: z.number().default(20),
-        offset: z.number().default(0),
+        size: z.number().min(1).max(100).optional(),
+        cursor: z.string().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -16,10 +16,11 @@ export const memberRouter = createTRPCRouter({
         .filter({
           "organization.id": session.user.organisation?.id,
         })
+        .sort("firstName", "asc")
         .getPaginated({
           pagination: {
-            size: input.size,
-            offset: input.offset,
+            size: input.size ?? 30,
+            after: input.cursor,
           },
         });
 

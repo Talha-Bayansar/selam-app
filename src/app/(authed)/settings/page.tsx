@@ -14,7 +14,7 @@ const Page = () => {
   };
 
   return (
-    <PageWrapper className="flex flex-col gap-4" title="Settings">
+    <PageWrapper className="flex flex-col gap-4 md:max-w-lg" title="Settings">
       <h2 className="text-xl">{session.data?.user.name}</h2>
       <Button onClick={handleSignOut} variant="destructive">
         Sign out
