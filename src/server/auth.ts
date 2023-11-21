@@ -8,6 +8,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 import { env } from "~/env.mjs";
 import { db } from "./db";
+import { routes } from "~/lib";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -44,6 +45,9 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
+  },
+  pages: {
+    signIn: routes.signIn,
   },
   adapter: XataAdapter(db),
   secret: env.NEXTAUTH_SECRET,

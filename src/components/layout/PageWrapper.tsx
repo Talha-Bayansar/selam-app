@@ -1,5 +1,5 @@
 import React, { type HTMLAttributes } from "react";
-import { twMerge } from "tailwind-merge";
+import { cn } from "~/lib";
 
 type Props = {
   title: string;
@@ -9,7 +9,7 @@ export const PageWrapper = ({ title, ...props }: Props) => {
   return (
     <div className="flex flex-grow flex-col gap-8">
       <h1 className="text-4xl">{title}</h1>
-      <div {...props} className={twMerge("flex flex-col", props.className)}>
+      <div {...props} className={cn("flex flex-col", props.className)}>
         {props.children}
       </div>
     </div>
