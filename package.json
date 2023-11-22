@@ -23,6 +23,7 @@
     "@xata.io/client": "^0.27.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "crypto": "^1.0.1",
     "date-fns": "^2.30.0",
     "lucide-react": "^0.292.0",
     "next": "^14.0.0",
