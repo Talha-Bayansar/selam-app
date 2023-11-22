@@ -1,7 +1,7 @@
 "use client";
 import { format } from "date-fns";
 import React from "react";
-import { Button, ListTile } from "~/components";
+import { Button, ListTile, ShowEmpty } from "~/components";
 import { api } from "~/trpc/react";
 import { MembersListSkeleton } from ".";
 
@@ -29,43 +29,37 @@ export const MembersList = () => {
     {} as (typeof data.pages)[0],
   );
 
-  return (
+  return isLoading ? (
+    <MembersListSkeleton />
+  ) : members && members.records.length > 0 ? (
     <div className="w-full">
-      {isLoading ? (
-        <MembersListSkeleton />
-      ) : (
-        <div>
-          <Button
-            disabled={!members?.meta.page.more}
-            className="mb-4"
-            onClick={() => fetchNextPage()}
-          >
-            More
-          </Button>
-          {members ? (
-            members.records.map((member, i) => {
-              return (
-                <ListTile
-                  key={member.id}
-                  href={`./${member.id}`}
-                  title={`${member.firstName} ${member.lastName}`}
-                  subtitle={
-                    !!member.dateOfBirth
-                      ? format(
-                          Date.parse(member.dateOfBirth.toString()),
-                          "dd/MM/yyyy",
-                        )
-                      : "undefined"
-                  }
-                  isLastItem={(members.records.length ?? 0) > i + 1}
-                />
-              );
-            })
-          ) : (
-            <p>No data</p>
-          )}
-        </div>
-      )}
+      <Button
+        disabled={!members?.meta.page.more}
+        className="mb-4"
+        onClick={() => fetchNextPage()}
+      >
+        More
+      </Button>
+      {members.records.map((member, i) => {
+        return (
+          <ListTile
+            key={member.id}
+            href={`./${member.id}`}
+            title={`${member.firstName} ${member.lastName}`}
+            subtitle={
+              !!member.dateOfBirth
+                ? format(
+                    Date.parse(member.dateOfBirth.toString()),
+                    "dd/MM/yyyy",
+                  )
+                : "undefined"
+            }
+            isLastItem={(members.records.length ?? 0) > i + 1}
+          />
+        );
+      })}
     </div>
+  ) : (
+    <ShowEmpty />
   );
 };
