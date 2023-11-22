@@ -20,5 +20,5 @@
   "dir": "auto",
   "name": "Selam",
   "short_name": "Selam",
-  "start_url": "."
+  "start_url": "/dashboard"
 }
