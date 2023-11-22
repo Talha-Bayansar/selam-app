@@ -9,10 +9,8 @@ import { routes } from "~/lib";
 
 export const MembersList = () => {
   const { data, isLoading, fetchNextPage, isFetchingNextPage } =
-    api.member.getAll.useInfiniteQuery(
-      {
-        size: 3,
-      },
+    api.members.getAll.useInfiniteQuery(
+      {},
       {
         getNextPageParam: (currentPage) => {
           return currentPage.meta.page.cursor;
@@ -64,7 +62,7 @@ export const MembersList = () => {
         {isFetchingNextPage ? (
           <Loader2 className="animate-spin" />
         ) : members?.meta.page.more ? (
-          "Retrieve more data"
+          "Load more"
         ) : (
           "No more data"
         )}
