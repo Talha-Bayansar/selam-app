@@ -1,6 +1,8 @@
 "use client";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 import { Button, PageWrapper, Skeleton } from "~/components";
+import { routes } from "~/lib";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -10,14 +12,26 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
+  const router = useRouter();
   const { data, isLoading } = api.members.getById.useQuery({
     id: params.memberId,
+  });
+
+  const mutation = api.members.deleteById.useMutation({
+    onSuccess() {
+      router.replace(routes.members);
+    },
   });
 
   const handleDelete = () => {
     const hasConfirmed = confirm(
       "Are you sure you want to delete this member?",
     );
+    if (hasConfirmed) {
+      mutation.mutate({
+        id: params.memberId,
+      });
+    }
   };
 
   if (isLoading) {

@@ -51,4 +51,28 @@ export const memberRouter = createTRPCRouter({
 
       return member;
     }),
+  deleteById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+
+      const response = await xata.db.members.delete({
+        id: input.id,
+        organization: session.user.organisation?.id,
+      });
+
+      console.log(response);
+
+      if (!response)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Failed to delete member.",
+        });
+
+      return response;
+    }),
 });
