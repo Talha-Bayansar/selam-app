@@ -57,6 +57,7 @@ export const MembersList = () => {
       <Button
         disabled={!members?.meta.page.more || isFetchingNextPage}
         className="mt-4 w-full"
+        variant="secondary"
         onClick={() => fetchNextPage()}
       >
         {isFetchingNextPage ? (

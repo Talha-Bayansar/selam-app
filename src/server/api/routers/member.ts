@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -50,6 +51,34 @@ export const memberRouter = createTRPCRouter({
         });
 
       return member;
+    }),
+  create: protectedProcedure
+    .input(
+      z.object({
+        firstName: z.string().min(1),
+        lastName: z.string().min(1),
+        dateOfBirth: z.string().optional(),
+        address: z.string().optional(),
+        phoneNumber: z.string().optional(),
+        gender: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const newMember = await xata.db.members.create({
+        ...input,
+        dateOfBirth: input.dateOfBirth ? new Date(input.dateOfBirth) : null,
+        gender: input.gender || null,
+        organization: session.user.organisation?.id,
+      });
+
+      if (!newMember)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Member could not be created.",
+        });
+
+      return newMember;
     }),
   deleteById: protectedProcedure
     .input(
