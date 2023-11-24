@@ -1,5 +1,6 @@
 "use client";
 import { format } from "date-fns";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, PageWrapper, Skeleton } from "~/components";
 import { routes } from "~/lib";
@@ -59,7 +60,9 @@ const Page = ({ params }: Props) => {
       title={`${data?.firstName} ${data?.lastName}`}
     >
       <div className="grid grid-cols-2 gap-4">
-        <Button>Edit</Button>
+        <Button asChild>
+          <Link href={`${routes.members}/${params.memberId}/edit`}>Edit</Link>
+        </Button>
         <Button variant="destructive" onClick={handleDelete}>
           Delete
         </Button>

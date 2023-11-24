@@ -1,5 +1,10 @@
 import { createTRPCRouter } from "~/server/api/trpc";
-import { organisationRouter, memberRouter, groupRouter } from "./routers";
+import {
+  organisationRouter,
+  memberRouter,
+  groupRouter,
+  genderRouter,
+} from "./routers";
 
 /**
  * This is the primary router for your server.
@@ -10,6 +15,7 @@ export const appRouter = createTRPCRouter({
   organisations: organisationRouter,
   members: memberRouter,
   groups: groupRouter,
+  genders: genderRouter,
 });
 
 // export type definition of API

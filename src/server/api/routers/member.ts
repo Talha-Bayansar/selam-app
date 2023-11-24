@@ -80,6 +80,45 @@ export const memberRouter = createTRPCRouter({
 
       return newMember;
     }),
+  edit: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        firstName: z.string().min(1),
+        lastName: z.string().min(1),
+        dateOfBirth: z.string().optional(),
+        address: z.string().optional(),
+        phoneNumber: z.string().optional(),
+        gender: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const member = await xata.db.members
+        .filter({
+          id: input.id,
+          "organization.id": session.user.organisation?.id,
+        })
+        .getFirst();
+
+      if (member) {
+        const editedMember = await xata.db.members.update({
+          ...input,
+          dateOfBirth: input.dateOfBirth ? new Date(input.dateOfBirth) : null,
+          gender: input.gender || null,
+        });
+        if (!editedMember)
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Could not edit member",
+          });
+        return editedMember;
+      }
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Could not edit member",
+      });
+    }),
   deleteById: protectedProcedure
     .input(
       z.object({
