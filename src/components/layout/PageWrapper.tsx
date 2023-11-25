@@ -1,5 +1,6 @@
 import React, { type HTMLAttributes } from "react";
 import { cn } from "~/lib";
+import { Skeleton } from "..";
 
 type Props = {
   title: string;
@@ -7,11 +8,24 @@ type Props = {
 
 export const PageWrapper = ({ title, ...props }: Props) => {
   return (
-    <div className="flex flex-grow flex-col gap-8">
+    <main className="flex flex-grow flex-col gap-8">
       <h1 className="text-4xl">{title}</h1>
       <div {...props} className={cn(props.className)}>
         {props.children}
       </div>
-    </div>
+    </main>
+  );
+};
+
+type SkeletonProps = React.HTMLAttributes<HTMLDivElement>;
+
+export const PageWrapperSkeleton = (props: SkeletonProps) => {
+  return (
+    <main className="flex flex-grow flex-col gap-8">
+      <Skeleton className="h-10 w-64" />
+      <div {...props} className={cn(props.className)}>
+        {props.children}
+      </div>
+    </main>
   );
 };

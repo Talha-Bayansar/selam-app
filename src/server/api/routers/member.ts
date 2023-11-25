@@ -58,6 +58,39 @@ export const memberRouter = createTRPCRouter({
 
       return member;
     }),
+  getByGroupID: protectedProcedure
+    .input(
+      z.object({
+        groupId: z.string().min(1),
+        size: z.number().min(1).max(100).optional(),
+        cursor: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const membersByGroup = await xata.db.members_groups
+        .filter({
+          "group.id": input.groupId,
+          "member.organization.id": session.user.organisation?.id,
+          "group.organization.id": session.user.organisation?.id,
+        })
+        .sort("member.firstName", "asc")
+        .select(["member.*"])
+        .getPaginated({
+          pagination: {
+            size: input.size ?? 30,
+            after: input.cursor,
+          },
+        });
+
+      if (!membersByGroup)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Something went wrong while getting the members.",
+        });
+
+      return membersByGroup;
+    }),
   create: protectedProcedure
     .input(
       z.object({

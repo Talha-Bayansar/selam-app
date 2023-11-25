@@ -8,10 +8,10 @@ import { MembersList } from "~/members";
 const Page = () => {
   return (
     <PageWrapper
-      className="flex flex-grow flex-col items-start"
+      className="flex flex-grow flex-col items-start gap-4"
       title="Members"
     >
-      <Button asChild className="mb-4 w-full md:w-auto">
+      <Button asChild className="w-full md:w-auto">
         <Link href={`${routes.members}/create`}>New member</Link>
       </Button>
       <MembersList />

@@ -59,4 +59,42 @@ export const groupRouter = createTRPCRouter({
 
       return result;
     }),
+  getById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const group = await xata.db.groups
+        .filter({
+          id: input.id,
+          "organization.id": session.user.organisation?.id,
+        })
+        .getFirst();
+
+      if (!group)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Group with given ID does not exist.",
+        });
+
+      const aggregate = await xata.db.members_groups.aggregate({
+        count: {
+          count: {
+            filter: {
+              "group.id": input.id,
+            },
+          },
+        },
+      });
+
+      const result = {
+        ...group,
+        membersCount: aggregate.aggs.count,
+      } as Group;
+
+      return result;
+    }),
 });

@@ -2,7 +2,12 @@
 import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button, PageWrapper, Skeleton } from "~/components";
+import {
+  Button,
+  PageWrapper,
+  PageWrapperSkeleton,
+  Skeleton,
+} from "~/components";
 import { routes } from "~/lib";
 import { api } from "~/trpc/react";
 
@@ -37,20 +42,18 @@ const Page = ({ params }: Props) => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-grow flex-col gap-8">
-        <Skeleton className="h-10 w-64" />
-        <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <Skeleton className="h-10" />
-            <Skeleton className="h-10" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Skeleton className="h-4 w-64" />
-            <Skeleton className="h-4 w-52" />
-            <Skeleton className="h-4 w-40" />
-          </div>
+      <PageWrapperSkeleton className="flex flex-col gap-4 md:max-w-lg">
+        <div className="grid grid-cols-2 gap-4">
+          <Skeleton className="h-10" />
+          <Skeleton className="h-10" />
         </div>
-      </div>
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-4 w-64" />
+          <Skeleton className="h-4 w-64" />
+          <Skeleton className="h-4 w-64" />
+          <Skeleton className="h-4 w-40" />
+        </div>
+      </PageWrapperSkeleton>
     );
   }
 
