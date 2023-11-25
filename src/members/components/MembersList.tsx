@@ -1,9 +1,8 @@
 "use client";
 import { format } from "date-fns";
 import React from "react";
-import { Button, ListTile, ShowEmpty } from "~/components";
+import { Button, ListTile, Separator, ShowEmpty, Skeleton } from "~/components";
 import { api } from "~/trpc/react";
-import { MembersListSkeleton } from ".";
 import { Loader2 } from "lucide-react";
 import { routes } from "~/lib";
 
@@ -72,4 +71,24 @@ export const MembersList = () => {
   ) : (
     <ShowEmpty />
   );
+};
+
+type Props = {
+  size?: number;
+};
+
+export const MembersListSkeleton = ({ size = 20 }: Props) => {
+  return [...Array(size).keys()].map((_, i) => (
+    <div key={i} className="w-full">
+      <Button
+        disabled
+        className="flex h-auto w-full flex-col items-start gap-1 px-0"
+        variant="ghost"
+      >
+        <Skeleton className="h-5 w-32" />
+        <Skeleton className="h-4 w-24" />
+      </Button>
+      {[...Array(size).keys()].length > i + 1 && <Separator />}
+    </div>
+  ));
 };

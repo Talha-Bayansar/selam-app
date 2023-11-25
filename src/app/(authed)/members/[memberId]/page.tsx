@@ -68,13 +68,14 @@ const Page = ({ params }: Props) => {
         </Button>
       </div>
       <div className="flex flex-col">
-        <div>Address: {data?.address}</div>
         <div>
           Date of birth:{" "}
           {data?.dateOfBirth
             ? format(Date.parse(data?.dateOfBirth.toString()), "dd/MM/yyyy")
             : "undefined"}
         </div>
+        <div>Address: {data?.address ?? "undefined"}</div>
+        <div>Phone number: {data?.phoneNumber ?? "undefined"}</div>
         <div>Gender: {data?.gender ? data?.gender?.name : "undefined"}</div>
       </div>
     </PageWrapper>

@@ -26,6 +26,12 @@ export const memberRouter = createTRPCRouter({
           },
         });
 
+      if (!members)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Something went wrong while getting the members.",
+        });
+
       return members;
     }),
   getById: protectedProcedure
