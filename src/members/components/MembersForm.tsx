@@ -19,7 +19,7 @@ import {
   Select,
 } from "~/components";
 import { api } from "~/trpc/react";
-import { cn } from "~/lib";
+import { cn, generateArray } from "~/lib";
 import { type MembersRecord } from "~/server/db";
 import { format } from "date-fns";
 
@@ -178,7 +178,7 @@ export const MembersFormSkeleton = () => {
   return (
     <div className="flex flex-grow flex-col justify-between gap-8 md:justify-normal">
       <div className="flex flex-col gap-4">
-        {[...Array(6).keys()].map((val) => (
+        {generateArray(6).map((val) => (
           <div key={val} className="flex w-full flex-col gap-4">
             <Skeleton className="h-4 w-16" />
             <Skeleton className="h-10 w-full" />

@@ -1,8 +1,11 @@
 "use client";
-import { Loader2 } from "lucide-react";
-import { Button, ListTile, ShowEmpty } from "~/components";
-import { routes } from "~/lib";
-import { MembersListSkeleton } from "~/members";
+import {
+  ListSkeleton,
+  ListTile,
+  PaginationButton,
+  ShowEmpty,
+} from "~/components";
+import { reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
 
 export const GroupsList = () => {
@@ -16,22 +19,10 @@ export const GroupsList = () => {
       },
     );
 
-  const groups = data?.pages.reduce(
-    (previous, current) => {
-      if (previous.records) {
-        return {
-          ...current,
-          records: [...previous.records, ...current.records],
-        } as typeof current;
-      } else {
-        return current;
-      }
-    },
-    {} as (typeof data.pages)[0],
-  );
+  const groups = data && reducePages(data.pages);
 
   return isLoading ? (
-    <MembersListSkeleton />
+    <ListSkeleton />
   ) : groups && groups.records.length > 0 ? (
     <div className="w-full">
       {groups.records.map((group, i) => {
@@ -45,20 +36,12 @@ export const GroupsList = () => {
           />
         );
       })}
-      <Button
-        disabled={!groups?.meta.page.more || isFetchingNextPage}
-        className="mt-4 w-full"
-        variant="secondary"
+      <PaginationButton
+        className="mt-4"
+        canLoadMore={groups?.meta.page.more}
+        isLoading={isFetchingNextPage}
         onClick={() => fetchNextPage()}
-      >
-        {isFetchingNextPage ? (
-          <Loader2 className="animate-spin" />
-        ) : groups?.meta.page.more ? (
-          "Load more"
-        ) : (
-          "No more data"
-        )}
-      </Button>
+      />
     </div>
   ) : (
     <ShowEmpty />

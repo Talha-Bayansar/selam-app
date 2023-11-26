@@ -1,10 +1,14 @@
 "use client";
 import { format } from "date-fns";
 import React from "react";
-import { Button, ListTile, ListTileSkeleton, ShowEmpty } from "~/components";
+import {
+  ListSkeleton,
+  ListTile,
+  PaginationButton,
+  ShowEmpty,
+} from "~/components";
 import { api } from "~/trpc/react";
-import { Loader2 } from "lucide-react";
-import { routes } from "~/lib";
+import { reducePages, routes } from "~/lib";
 
 export const MembersList = () => {
   const { data, isLoading, fetchNextPage, isFetchingNextPage } =
@@ -17,22 +21,10 @@ export const MembersList = () => {
       },
     );
 
-  const members = data?.pages.reduce(
-    (previous, current) => {
-      if (previous.records) {
-        return {
-          ...current,
-          records: [...previous.records, ...current.records],
-        } as typeof current;
-      } else {
-        return current;
-      }
-    },
-    {} as (typeof data.pages)[0],
-  );
+  const members = data && reducePages(data?.pages);
 
   return isLoading ? (
-    <MembersListSkeleton />
+    <ListSkeleton />
   ) : members && members.records.length > 0 ? (
     <div className="w-full">
       {members.records.map((member, i) => {
@@ -53,36 +45,14 @@ export const MembersList = () => {
           />
         );
       })}
-      <Button
-        disabled={!members?.meta.page.more || isFetchingNextPage}
-        className="mt-4 w-full"
-        variant="secondary"
+      <PaginationButton
+        className="mt-4"
+        canLoadMore={members?.meta.page.more}
+        isLoading={isFetchingNextPage}
         onClick={() => fetchNextPage()}
-      >
-        {isFetchingNextPage ? (
-          <Loader2 className="animate-spin" />
-        ) : members?.meta.page.more ? (
-          "Load more"
-        ) : (
-          "No more data"
-        )}
-      </Button>
+      />
     </div>
   ) : (
     <ShowEmpty />
   );
-};
-
-type Props = {
-  size?: number;
-};
-
-export const MembersListSkeleton = ({ size = 20 }: Props) => {
-  return [...Array(size).keys()].map((_, i) => (
-    <ListTileSkeleton
-      key={i}
-      isLastItem={[...Array(size).keys()].length > i + 1}
-      hasSubtitle
-    />
-  ));
 };

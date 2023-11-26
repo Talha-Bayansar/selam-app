@@ -7,3 +7,4 @@ export * from "./label";
 export * from "./input";
 export * from "./select";
 export * from "./ListTile";
+export * from "./PaginationButton";

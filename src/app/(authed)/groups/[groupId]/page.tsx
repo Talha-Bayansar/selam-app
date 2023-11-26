@@ -1,6 +1,5 @@
 "use client";
 import { format } from "date-fns";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import {
   Button,
@@ -8,8 +7,9 @@ import {
   ListTileSkeleton,
   PageWrapper,
   PageWrapperSkeleton,
+  PaginationButton,
 } from "~/components";
-import { routes } from "~/lib";
+import { generateArray, reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -37,19 +37,7 @@ const Page = ({ params }: Props) => {
     },
   );
 
-  const members = data?.pages.reduce(
-    (previous, current) => {
-      if (previous.records) {
-        return {
-          ...current,
-          records: [...previous.records, ...current.records],
-        } as typeof current;
-      } else {
-        return current;
-      }
-    },
-    {} as (typeof data.pages)[0],
-  );
+  const members = data && reducePages(data?.pages);
 
   const handleDelete = () => {
     confirm("Are you sure you want to delete this group?");
@@ -64,10 +52,10 @@ const Page = ({ params }: Props) => {
             Delete
           </Button>
         </div>
-        {[...Array(20).keys()].map((val, i) => (
+        {generateArray().map((val, i) => (
           <ListTileSkeleton
             key={val}
-            isLastItem={[...Array(20).keys()].length > i + 1}
+            isLastItem={generateArray().length > i + 1}
             hasSubtitle
           />
         ))}
@@ -86,11 +74,11 @@ const Page = ({ params }: Props) => {
       </div>
       <div className="flex flex-col">
         {membersAreLoading
-          ? [...Array(20).keys()].map((val, i) => (
+          ? generateArray().map((val, i) => (
               <ListTileSkeleton
                 key={val}
                 hasSubtitle
-                isLastItem={[...Array(20).keys()].length > i + 1}
+                isLastItem={generateArray().length > i + 1}
               />
             ))
           : members?.records.map((member, i) => (
@@ -109,20 +97,12 @@ const Page = ({ params }: Props) => {
                 }
               />
             ))}
-        <Button
-          disabled={!members?.meta.page.more || isFetchingNextPage}
-          className="mt-4 w-full"
-          variant="secondary"
+        <PaginationButton
+          canLoadMore={members?.meta.page.more ?? false}
+          isLoading={isFetchingNextPage}
+          className="mt-4"
           onClick={() => fetchNextPage()}
-        >
-          {isFetchingNextPage ? (
-            <Loader2 className="animate-spin" />
-          ) : members?.meta.page.more ? (
-            "Load more"
-          ) : (
-            "No more data"
-          )}
-        </Button>
+        />
       </div>
     </PageWrapper>
   );
