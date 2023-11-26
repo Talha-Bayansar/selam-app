@@ -1,6 +1,7 @@
 "use client";
 import { format } from "date-fns";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Button,
   ListTile,
@@ -19,6 +20,7 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
+  const router = useRouter();
   const { data: group, isLoading: groupIsLoading } =
     api.groups.getById.useQuery({
       id: params.groupId,
@@ -36,11 +38,21 @@ const Page = ({ params }: Props) => {
       getNextPageParam: (currentPage) => currentPage.meta.page.cursor,
     },
   );
+  const mutation = api.groups.deleteById.useMutation({
+    onSuccess() {
+      router.replace(routes.groups);
+    },
+  });
 
   const members = data && reducePages(data?.pages);
 
   const handleDelete = () => {
-    confirm("Are you sure you want to delete this group?");
+    const hasConfirmed = confirm("Are you sure you want to delete this group?");
+    if (hasConfirmed) {
+      mutation.mutate({
+        id: params.groupId,
+      });
+    }
   };
 
   if (groupIsLoading) {

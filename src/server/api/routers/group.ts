@@ -103,7 +103,7 @@ export const groupRouter = createTRPCRouter({
         id: z.string().min(1),
       }),
     )
-    .query(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const { xata, session } = ctx;
 
       const response = await xata.db.groups.delete({
