@@ -78,7 +78,7 @@ const Page = ({ params }: Props) => {
     <PageWrapper className="flex flex-col gap-4" title={group!.name!}>
       <div className="grid grid-cols-2 gap-4 md:max-w-lg">
         <Button asChild>
-          <Link href={`${routes.members}/${params.groupId}/edit`}>Edit</Link>
+          <Link href={`${routes.groups}/${params.groupId}/edit`}>Edit</Link>
         </Button>
         <Button variant="destructive" onClick={handleDelete}>
           Delete
