@@ -12,8 +12,10 @@ import {
   Button,
   Input,
   Form,
+  Skeleton,
 } from "~/components";
 import { cn } from "~/lib";
+import { type GroupsRecord } from "~/server/db";
 
 const formSchema = z.object({
   name: z.string().min(1, "Required"),
@@ -21,18 +23,21 @@ const formSchema = z.object({
 
 type Props = {
   className?: string;
+  group?: GroupsRecord;
+  isSubmitting: boolean;
+  onSubmit: (values: z.infer<typeof formSchema>) => void;
 };
 
 export const GroupsForm = (props: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      name: props.group?.name ?? "",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    props.onSubmit(values);
   }
 
   return (
@@ -58,8 +63,22 @@ export const GroupsForm = (props: Props) => {
           )}
         />
 
-        <Button type="submit">Create</Button>
+        <Button type="submit" disabled={props.isSubmitting}>
+          {!!props.group ? "Edit" : "Create"}
+        </Button>
       </form>
     </Form>
+  );
+};
+
+export const GroupsFormSkeleton = () => {
+  return (
+    <div className="flex flex-grow flex-col justify-between gap-8 md:justify-normal">
+      <div className="flex w-full flex-col gap-4">
+        <Skeleton className="h-4 w-16" />
+        <Skeleton className="h-10 w-full" />
+      </div>
+      <Skeleton className="h-10 w-full" />
+    </div>
   );
 };

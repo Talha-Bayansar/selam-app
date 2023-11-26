@@ -97,6 +97,49 @@ export const groupRouter = createTRPCRouter({
 
       return result;
     }),
+  create: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const response = await xata.db.groups.create({
+        ...input,
+        organization: session.user.organisation?.id,
+      });
+
+      if (!response)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Group could not be created.",
+        });
+
+      return response;
+    }),
+  edit: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const response = await xata.db.groups.update({
+        ...input,
+        organization: session.user.organisation?.id,
+      });
+
+      if (!response)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Group could not be updated.",
+        });
+
+      return response;
+    }),
   deleteById: protectedProcedure
     .input(
       z.object({
