@@ -97,4 +97,36 @@ export const groupRouter = createTRPCRouter({
 
       return result;
     }),
+  deleteById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+
+      const response = await xata.db.groups.delete({
+        id: input.id,
+        organization: session.user.organisation?.id,
+      });
+
+      if (!response)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Group with given ID could not be deleted.",
+        });
+
+      const membersGroups = await xata.db.members_groups
+        .filter({
+          "group.id": input.id,
+        })
+        .getAll();
+
+      for (const memberGroup of membersGroups) {
+        await memberGroup.delete();
+      }
+
+      return response;
+    }),
 });

@@ -172,13 +172,21 @@ export const memberRouter = createTRPCRouter({
         organization: session.user.organisation?.id,
       });
 
-      console.log(response);
-
       if (!response)
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Failed to delete member.",
         });
+
+      const membersGroups = await xata.db.members_groups
+        .filter({
+          "member.id": response.id,
+        })
+        .getAll();
+
+      for (const memberGroup of membersGroups) {
+        await memberGroup.delete();
+      }
 
       return response;
     }),
