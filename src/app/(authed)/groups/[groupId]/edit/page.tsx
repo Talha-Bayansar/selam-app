@@ -24,13 +24,13 @@ const Page = ({ params }: Props) => {
 
   if (isLoading)
     return (
-      <PageWrapperSkeleton>
+      <PageWrapperSkeleton className="md:max-w-lg">
         <GroupsFormSkeleton />
       </PageWrapperSkeleton>
     );
 
   return (
-    <PageWrapper title="Edit group">
+    <PageWrapper className="md:max-w-lg" title="Edit group">
       <GroupsForm
         onSubmit={(values) =>
           mutation.mutate({

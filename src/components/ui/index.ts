@@ -6,5 +6,6 @@ export * from "./form";
 export * from "./label";
 export * from "./input";
 export * from "./select";
+export * from "./sheet";
 export * from "./ListTile";
 export * from "./PaginationButton";

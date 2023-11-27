@@ -172,4 +172,30 @@ export const groupRouter = createTRPCRouter({
 
       return response;
     }),
+  deleteMemberFromGroup: protectedProcedure
+    .input(
+      z.object({
+        memberGroupId: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      if (session.user.organisation?.id) {
+        const response = await xata.db.members_groups.delete({
+          id: input.memberGroupId,
+        });
+
+        if (!response)
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Could not delete member from group.",
+          });
+
+        return response;
+      } else
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not part of an organisation.",
+        });
+    }),
 });

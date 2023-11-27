@@ -9,8 +9,16 @@ import {
   PageWrapper,
   PageWrapperSkeleton,
   PaginationButton,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from "~/components";
 import { generateArray, reducePages, routes } from "~/lib";
+import { type MembersGroupsRecord } from "~/server/db";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -30,6 +38,7 @@ const Page = ({ params }: Props) => {
     isLoading: membersAreLoading,
     fetchNextPage,
     isFetchingNextPage,
+    refetch,
   } = api.members.getByGroupID.useInfiniteQuery(
     {
       groupId: params.groupId,
@@ -43,6 +52,12 @@ const Page = ({ params }: Props) => {
       router.replace(routes.groups);
     },
   });
+  const deleteMemberFromGroupMutation =
+    api.groups.deleteMemberFromGroup.useMutation({
+      onSuccess: async () => {
+        await refetch();
+      },
+    });
 
   const members = data && reducePages(data?.pages);
 
@@ -55,9 +70,20 @@ const Page = ({ params }: Props) => {
     }
   };
 
+  const handleDeleteFromGroup = (memberGroup: MembersGroupsRecord) => {
+    const hasConfirmed = confirm(
+      `Are you sure you want to delete ${memberGroup.member?.firstName} ${memberGroup.member?.lastName} from ${group?.name}?`,
+    );
+    if (hasConfirmed) {
+      deleteMemberFromGroupMutation.mutate({
+        memberGroupId: memberGroup.id,
+      });
+    }
+  };
+
   if (groupIsLoading) {
     return (
-      <PageWrapperSkeleton className="flex flex-col">
+      <PageWrapperSkeleton className="flex flex-col gap-4">
         <div className="grid grid-cols-2 gap-4 md:max-w-lg">
           <Button disabled>Edit</Button>
           <Button variant="destructive" disabled>
@@ -76,9 +102,14 @@ const Page = ({ params }: Props) => {
   }
   return (
     <PageWrapper className="flex flex-col gap-4" title={group!.name!}>
-      <div className="grid grid-cols-2 gap-4 md:max-w-lg">
+      <div className="grid grid-cols-3 gap-4 md:max-w-lg">
         <Button asChild>
           <Link href={`${routes.groups}/${params.groupId}/edit`}>Edit</Link>
+        </Button>
+        <Button asChild>
+          <Link href={`${routes.groups}/${params.groupId}/add-members`}>
+            Add
+          </Link>
         </Button>
         <Button variant="destructive" onClick={handleDelete}>
           Delete
@@ -94,20 +125,39 @@ const Page = ({ params }: Props) => {
               />
             ))
           : members?.records.map((member, i) => (
-              <ListTile
-                key={member.id}
-                href={`${routes.members}/${member.member?.id}`}
-                title={`${member.member?.firstName} ${member.member?.lastName}`}
-                isLastItem={members.records.length > i + 1}
-                subtitle={
-                  member.member?.dateOfBirth
-                    ? format(
-                        new Date(member.member.dateOfBirth.toString()),
-                        "dd/MM/yyyy",
-                      )
-                    : "undefined"
-                }
-              />
+              <Sheet key={member.id}>
+                <SheetTrigger asChild>
+                  <ListTile
+                    title={`${member.member?.firstName} ${member.member?.lastName}`}
+                    isLastItem={members.records.length > i + 1}
+                    subtitle={
+                      member.member?.dateOfBirth
+                        ? format(
+                            new Date(member.member.dateOfBirth.toString()),
+                            "dd/MM/yyyy",
+                          )
+                        : "undefined"
+                    }
+                  />
+                </SheetTrigger>
+                <SheetContent className="flex flex-col gap-4" side="bottom">
+                  <SheetHeader>
+                    <SheetTitle className="text-left">{`${member.member?.firstName} ${member.member?.lastName}`}</SheetTitle>
+                  </SheetHeader>
+                  <SheetFooter className="sm:flex-col md:w-auto md:items-start">
+                    <SheetClose asChild>
+                      <Button
+                        variant="destructive"
+                        onClick={() =>
+                          handleDeleteFromGroup(member as MembersGroupsRecord)
+                        }
+                      >
+                        Delete from group
+                      </Button>
+                    </SheetClose>
+                  </SheetFooter>
+                </SheetContent>
+              </Sheet>
             ))}
         <PaginationButton
           canLoadMore={members?.meta.page.more ?? false}

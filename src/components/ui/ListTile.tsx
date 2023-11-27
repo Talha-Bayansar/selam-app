@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cn } from "~/lib";
 
 type Props = {
-  href: string;
+  href?: string;
   title: string;
   subtitle?: string;
   isLastItem: boolean;
@@ -22,11 +22,19 @@ export const ListTile = ({
       <Button
         className="flex h-auto w-full flex-col items-start px-0"
         variant="ghost"
+        asChild={!!href}
       >
-        <Link href={href} className="flex w-full flex-col items-start">
-          <div className="text-lg">{title}</div>
-          {subtitle && <span className="text-xs">{subtitle}</span>}
-        </Link>
+        {!!href ? (
+          <Link href={href} className="flex w-full flex-col items-start">
+            <div className="text-lg">{title}</div>
+            {subtitle && <span className="text-xs">{subtitle}</span>}
+          </Link>
+        ) : (
+          <>
+            <div className="text-lg">{title}</div>
+            {subtitle && <span className="text-xs">{subtitle}</span>}
+          </>
+        )}
       </Button>
       {isLastItem && <Separator />}
     </div>
