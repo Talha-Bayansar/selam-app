@@ -39,23 +39,16 @@ const Page = ({ params }: Props) => {
       getNextPageParam: (currentPage) => currentPage.meta.page.cursor,
     },
   );
-  const mutation = api.groups.editMembersByGroupId.useMutation({
+  const mutation = api.groups.addMembers.useMutation({
     onSuccess: () => {
       router.replace(`${routes.groups}/${params.groupId}`);
     },
   });
 
   const [addedMemberIds, setAddedMemberIds] = useState<string[]>([]);
-  const [deletedMemberIds, setDeletedMemberIds] = useState<string[]>([]);
 
   const selectMember = (id: string) => {
-    if (membersGroup?.find((memberGroup) => memberGroup.member?.id === id)) {
-      if (deletedMemberIds.includes(id)) {
-        setDeletedMemberIds((ids) => ids.filter((val) => val !== id));
-      } else {
-        setDeletedMemberIds((ids) => [...ids, id]);
-      }
-    } else {
+    if (!membersGroup?.find((memberGroup) => memberGroup.member?.id === id)) {
       if (addedMemberIds.includes(id)) {
         setAddedMemberIds((ids) => ids.filter((val) => val !== id));
       } else {
@@ -66,12 +59,8 @@ const Page = ({ params }: Props) => {
 
   const selectedMembers = useMemo(() => {
     const memberIdsGroup = membersGroup?.map((mg) => mg.member!.id);
-    if (memberIdsGroup)
-      return [
-        ...memberIdsGroup?.filter((id) => !deletedMemberIds.includes(id)),
-        ...addedMemberIds,
-      ];
-  }, [addedMemberIds, deletedMemberIds, membersGroup]);
+    if (memberIdsGroup) return [...memberIdsGroup, ...addedMemberIds];
+  }, [addedMemberIds, membersGroup]);
 
   const members = membersPaginated && reducePages(membersPaginated.pages);
 
@@ -96,7 +85,6 @@ const Page = ({ params }: Props) => {
           mutation.mutate({
             groupId: params.groupId,
             addMemberIds: addedMemberIds,
-            deleteMemberIds: deletedMemberIds,
           })
         }
         disabled={

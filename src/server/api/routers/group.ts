@@ -119,12 +119,11 @@ export const groupRouter = createTRPCRouter({
 
       return response;
     }),
-  editMembersByGroupId: protectedProcedure
+  addMembers: protectedProcedure
     .input(
       z.object({
         groupId: z.string().min(1),
         addMemberIds: z.string().array(),
-        deleteMemberIds: z.string().array(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -136,19 +135,6 @@ export const groupRouter = createTRPCRouter({
             group: input.groupId,
             member: memberId,
           });
-        }
-        for (const memberId of input.deleteMemberIds) {
-          const response = await xata.db.members_groups
-            .filter({
-              "group.id": input.groupId,
-              "member.id": memberId,
-            })
-            .getFirst();
-          if (response) {
-            await xata.db.members_groups.delete({
-              id: response.id,
-            });
-          }
         }
       }
     }),
