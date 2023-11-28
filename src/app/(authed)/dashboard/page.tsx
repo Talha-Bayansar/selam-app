@@ -1,6 +1,6 @@
 "use client";
 
-import { User, type LucideIcon, Users } from "lucide-react";
+import { User, type LucideIcon, Users, Cuboid } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent, PageWrapper } from "~/components";
 import { routes } from "~/lib";
@@ -22,6 +22,11 @@ const Page = () => {
       name: "Groups",
       Icon: Users,
       href: routes.groups,
+    },
+    {
+      name: "Departments",
+      Icon: Cuboid,
+      href: routes.departments,
     },
   ];
 

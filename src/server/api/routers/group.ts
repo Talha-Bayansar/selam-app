@@ -130,12 +130,24 @@ export const groupRouter = createTRPCRouter({
       const { xata, session } = ctx;
 
       if (session.user.organisation?.id) {
-        for (const memberId of input.addMemberIds) {
-          await xata.db.members_groups.create({
-            group: input.groupId,
-            member: memberId,
+        try {
+          for (const memberId of input.addMemberIds) {
+            await xata.db.members_groups.create({
+              group: input.groupId,
+              member: memberId,
+            });
+          }
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong while adding the members.",
           });
         }
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "No organisation found.",
+        });
       }
     }),
   deleteById: protectedProcedure

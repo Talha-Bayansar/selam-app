@@ -5,6 +5,7 @@ export const routes = {
   signIn: "/signin",
   members: "/members",
   groups: "/groups",
+  departments: "/departments",
   organisations: "/organisations",
   noAccess: "/no-access",
 };
