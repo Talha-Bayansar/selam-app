@@ -141,7 +141,10 @@ const Page = ({ params }: Props) => {
                     }
                   />
                 </SheetTrigger>
-                <SheetContent className="flex flex-col gap-4" side="bottom">
+                <SheetContent
+                  className="flex flex-col gap-4 pb-8"
+                  side="bottom"
+                >
                   <SheetHeader>
                     <SheetTitle className="text-left">{`${member.member?.firstName} ${member.member?.lastName}`}</SheetTitle>
                   </SheetHeader>
