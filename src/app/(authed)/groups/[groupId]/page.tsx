@@ -84,8 +84,9 @@ const Page = ({ params }: Props) => {
   if (groupIsLoading) {
     return (
       <PageWrapperSkeleton className="flex flex-col gap-4">
-        <div className="grid grid-cols-2 gap-4 md:max-w-lg">
+        <div className="grid grid-cols-3 gap-4 md:max-w-lg">
           <Button disabled>Edit</Button>
+          <Button disabled>Add</Button>
           <Button variant="destructive" disabled>
             Delete
           </Button>

@@ -1,11 +1,11 @@
 "use client";
 import {
-  ListSkeleton,
   ListTile,
+  ListTileSkeleton,
   PaginationButton,
   ShowEmpty,
 } from "~/components";
-import { reducePages, routes } from "~/lib";
+import { generateArray, reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
 
 export const GroupsList = () => {
@@ -22,7 +22,12 @@ export const GroupsList = () => {
   const groups = data && reducePages(data.pages);
 
   return isLoading ? (
-    <ListSkeleton />
+    generateArray(20).map((item, i) => (
+      <ListTileSkeleton
+        key={item}
+        isLastItem={generateArray(20).length > i + 1}
+      />
+    ))
   ) : groups && groups.records.length > 0 ? (
     <div className="w-full">
       {groups.records.map((group, i) => {
@@ -31,7 +36,6 @@ export const GroupsList = () => {
             key={group.id}
             href={`${routes.groups}/${group.id}`}
             title={group.name!}
-            subtitle={`Members: ${group.membersCount}`}
             isLastItem={(groups.records.length ?? 0) > i + 1}
           />
         );
