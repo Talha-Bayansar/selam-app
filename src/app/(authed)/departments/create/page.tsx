@@ -1,9 +1,10 @@
+"use client";
 import { PageWrapper } from "~/components";
 import { DepartmentsForm } from "~/departments";
 
 const Page = () => {
   return (
-    <PageWrapper title="New department">
+    <PageWrapper className="md:max-w-lg" title="New department">
       <DepartmentsForm onSubmit={console.log} isSubmitting={false} />
     </PageWrapper>
   );
