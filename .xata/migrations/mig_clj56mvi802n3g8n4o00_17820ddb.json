@@ -1,0 +1,35 @@
+{
+  "id": "mig_clj56mvi802n3g8n4o00",
+  "parentID": "mig_cl5unj1tregmc7qhrhog",
+  "checksum": "1:17820ddb87347287406e4394b51340f9b1e281097130c1f519a5128beaaa5ab2",
+  "operations": [
+    {
+      "addTable": {
+        "table": "departments"
+      }
+    },
+    {
+      "addColumn": {
+        "column": {
+          "name": "name",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "undefined"
+        },
+        "table": "departments"
+      }
+    },
+    {
+      "addColumn": {
+        "column": {
+          "name": "organisation",
+          "type": "link",
+          "link": {
+            "table": "organisations"
+          }
+        },
+        "table": "departments"
+      }
+    }
+  ]
+}
