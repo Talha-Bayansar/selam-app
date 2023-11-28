@@ -12,6 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  ShowEmpty,
 } from "~/components";
 import { cn, reducePages } from "~/lib";
 import { type MembersGroupsRecord } from "~/server/db";
@@ -56,41 +57,45 @@ export const GroupMembers = ({ groupId, ...props }: Props) => {
 
   return (
     <div className={cn("w-full", props.className)}>
-      {members?.records.map((memberGroup, i) => (
-        <Sheet key={memberGroup.id}>
-          <SheetTrigger asChild>
-            <ListTile
-              title={`${memberGroup.member?.firstName} ${memberGroup.member?.lastName}`}
-              isLastItem={members?.records.length > i + 1}
-              subtitle={
-                memberGroup.member?.dateOfBirth
-                  ? format(
-                      new Date(memberGroup.member.dateOfBirth.toString()),
-                      "dd/MM/yyyy",
-                    )
-                  : "undefined"
-              }
-            />
-          </SheetTrigger>
-          <SheetContent className="flex flex-col gap-4 pb-8" side="bottom">
-            <SheetHeader>
-              <SheetTitle className="text-left">{`${memberGroup.member?.firstName} ${memberGroup.member?.lastName}`}</SheetTitle>
-            </SheetHeader>
-            <SheetFooter className="sm:flex-col md:w-auto md:items-start">
-              <SheetClose asChild>
-                <Button
-                  variant="destructive"
-                  onClick={() =>
-                    handleDeleteFromGroup(memberGroup as MembersGroupsRecord)
-                  }
-                >
-                  Delete from group
-                </Button>
-              </SheetClose>
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>
-      ))}
+      {members && members.records.length > 0 ? (
+        members.records.map((memberGroup, i) => (
+          <Sheet key={memberGroup.id}>
+            <SheetTrigger asChild>
+              <ListTile
+                title={`${memberGroup.member?.firstName} ${memberGroup.member?.lastName}`}
+                isLastItem={members?.records.length > i + 1}
+                subtitle={
+                  memberGroup.member?.dateOfBirth
+                    ? format(
+                        new Date(memberGroup.member.dateOfBirth.toString()),
+                        "dd/MM/yyyy",
+                      )
+                    : "undefined"
+                }
+              />
+            </SheetTrigger>
+            <SheetContent className="flex flex-col gap-4 pb-8" side="bottom">
+              <SheetHeader>
+                <SheetTitle className="text-left">{`${memberGroup.member?.firstName} ${memberGroup.member?.lastName}`}</SheetTitle>
+              </SheetHeader>
+              <SheetFooter className="sm:flex-col md:w-auto md:items-start">
+                <SheetClose asChild>
+                  <Button
+                    variant="destructive"
+                    onClick={() =>
+                      handleDeleteFromGroup(memberGroup as MembersGroupsRecord)
+                    }
+                  >
+                    Delete from group
+                  </Button>
+                </SheetClose>
+              </SheetFooter>
+            </SheetContent>
+          </Sheet>
+        ))
+      ) : (
+        <ShowEmpty />
+      )}
       <PaginationButton
         canLoadMore={members?.meta.page.more ?? false}
         isLoading={isFetchingNextPage}

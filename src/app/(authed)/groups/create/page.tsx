@@ -14,7 +14,7 @@ const Page = () => {
   });
 
   return (
-    <PageWrapper className="flex flex-grow" title="New group">
+    <PageWrapper className="flex flex-grow md:max-w-lg" title="New group">
       <GroupsForm
         onSubmit={mutation.mutate}
         isSubmitting={mutation.isLoading}

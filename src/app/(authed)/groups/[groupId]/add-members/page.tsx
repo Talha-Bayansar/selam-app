@@ -81,6 +81,7 @@ const Page = ({ params }: Props) => {
   return (
     <PageWrapper className="flex flex-col gap-4" title={group!.name!}>
       <Button
+        className="md:max-w-lg"
         onClick={() =>
           mutation.mutate({
             groupId: params.groupId,
