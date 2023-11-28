@@ -4,14 +4,15 @@ import { generateArray } from "~/lib";
 
 type Props = {
   size?: number;
+  withSubtitle?: boolean;
 };
 
-export const ListSkeleton = ({ size }: Props) => {
+export const ListSkeleton = ({ size, withSubtitle = true }: Props) => {
   return generateArray(size).map((_, i) => (
     <ListTileSkeleton
       key={i}
       isLastItem={generateArray(size).length > i + 1}
-      hasSubtitle
+      hasSubtitle={withSubtitle}
     />
   ));
 };
