@@ -39,7 +39,7 @@ const Layout = ({ children }: Props) => {
       <main className="flex flex-grow flex-col p-8 pb-32 md:pb-8">
         {children}
       </main>
-      <nav className="fixed bottom-0 left-0 right-0 flex justify-evenly bg-gradient-to-t from-white from-80% to-transparent pb-8 pt-4 md:relative md:flex-col md:justify-start md:gap-4 md:px-4 md:py-6 md:shadow-xl">
+      <nav className="fixed bottom-0 left-0 right-0 flex justify-evenly bg-gradient-to-t from-white from-80% to-transparent py-8 md:relative md:flex-col md:justify-start md:gap-4 md:px-4 md:py-6 md:shadow-xl">
         {navItems.map((item) => {
           return (
             <Button key={item.name} variant="ghost" asChild>
@@ -68,7 +68,7 @@ export default function AuthLayout({ children }: Props) {
     case "loading":
       return (
         <div className="grid grow place-items-center">
-          <Loader2 size={40} className="text-primary animate-spin" />
+          <Loader2 size={40} className="animate-spin text-primary" />
         </div>
       );
     case "authenticated":

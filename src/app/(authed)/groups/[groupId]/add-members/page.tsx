@@ -108,7 +108,8 @@ const Page = ({ params }: Props) => {
               <ListTile
                 key={member.id}
                 className={cn({
-                  "text-primary": selectedMembers?.includes(member.id),
+                  "text-primary [&>button]:hover:text-primary":
+                    selectedMembers?.includes(member.id),
                 })}
                 onClick={() => selectMember(member.id)}
                 title={`${member.firstName} ${member.lastName}`}
