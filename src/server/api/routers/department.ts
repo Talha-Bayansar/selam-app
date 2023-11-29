@@ -61,4 +61,28 @@ export const departmentRouter = createTRPCRouter({
         });
       }
     }),
+  edit: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const response = await xata.db.departments.update({
+        id: input.id,
+        name: input.name,
+        organisation: session.user.organisation?.id,
+      });
+
+      if (!response) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not update department.",
+        });
+      }
+
+      return response;
+    }),
 });
