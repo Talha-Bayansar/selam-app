@@ -31,6 +31,29 @@ export const departmentRouter = createTRPCRouter({
 
       return response;
     }),
+  getById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const response = await xata.db.departments
+        .filter({
+          id: input.id,
+          "organisation.id": session.user.organisation?.id,
+        })
+        .getFirst();
+
+      if (!response)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Could not find department with given ID.",
+        });
+
+      return response;
+    }),
   create: protectedProcedure
     .input(
       z.object({

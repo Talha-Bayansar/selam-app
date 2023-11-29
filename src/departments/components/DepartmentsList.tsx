@@ -5,7 +5,7 @@ import {
   PaginationButton,
   ShowEmpty,
 } from "~/components";
-import { cn, reducePages } from "~/lib";
+import { cn, reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
 
 type Props = React.HTMLAttributes<HTMLDivElement>;
@@ -30,6 +30,7 @@ export const DepartmentsList = (props: Props) => {
       {departments.records.map((department, i) => (
         <ListTile
           key={department.id}
+          href={`${routes.departments}/${department.id}`}
           title={department.name}
           isLastItem={departments.records.length < i + 1}
         />
