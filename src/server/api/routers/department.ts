@@ -31,4 +31,34 @@ export const departmentRouter = createTRPCRouter({
 
       return response;
     }),
+  create: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      if (!!session.user.organisation?.id) {
+        const response = await xata.db.departments.create({
+          name: input.name,
+          organisation: session.user.organisation?.id,
+        });
+
+        if (!response) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Could not create department.",
+          });
+        }
+
+        return response;
+      } else {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message:
+            "You are not allowed to create a department without organisation.",
+        });
+      }
+    }),
 });
