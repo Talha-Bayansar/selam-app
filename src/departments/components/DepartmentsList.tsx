@@ -26,13 +26,13 @@ export const DepartmentsList = (props: Props) => {
   if (!departments || departments.records.length <= 0) return <ShowEmpty />;
 
   return (
-    <div {...props} className={cn("flex flex-col", props.className)}>
+    <div {...props} className={cn("flex w-full flex-col", props.className)}>
       {departments.records.map((department, i) => (
         <ListTile
           key={department.id}
           href={`${routes.departments}/${department.id}`}
           title={department.name}
-          isLastItem={departments.records.length < i + 1}
+          isLastItem={departments.records.length > i + 1}
         />
       ))}
       <PaginationButton
