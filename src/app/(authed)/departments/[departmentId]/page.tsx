@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Button,
@@ -37,12 +38,25 @@ const Page = ({ params }: Props) => {
   };
 
   if (isLoading)
-    return <PageWrapperSkeleton className="md:max-w-lg"></PageWrapperSkeleton>;
+    return (
+      <PageWrapperSkeleton className="flex flex-col gap-4 md:max-w-lg">
+        <div className="grid grid-cols-2 gap-4">
+          <Button disabled>Edit</Button>
+          <Button variant="destructive" disabled>
+            Delete
+          </Button>
+        </div>
+      </PageWrapperSkeleton>
+    );
 
   return (
     <PageWrapper className="flex flex-col gap-4 md:max-w-lg" title={data!.name}>
       <div className="grid grid-cols-2 gap-4">
-        <Button>Edit</Button>
+        <Button asChild>
+          <Link href={`${routes.departments}/${params.departmentId}/edit`}>
+            Edit
+          </Link>
+        </Button>
         <Button
           variant="destructive"
           onClick={handleDelete}

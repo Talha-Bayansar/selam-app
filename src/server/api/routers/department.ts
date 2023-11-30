@@ -16,6 +16,7 @@ export const departmentRouter = createTRPCRouter({
         .filter({
           "organisation.id": session.user.organisation?.id,
         })
+        .sort("name", "asc")
         .getPaginated({
           pagination: {
             size: input.size,
