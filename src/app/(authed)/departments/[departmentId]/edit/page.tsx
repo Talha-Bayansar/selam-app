@@ -26,7 +26,7 @@ const Page = ({ params }: Props) => {
 
   if (isLoading)
     return (
-      <PageWrapperSkeleton>
+      <PageWrapperSkeleton className="flex flex-grow flex-col md:max-w-lg">
         <DepartmentsFormSkeleton />
       </PageWrapperSkeleton>
     );
