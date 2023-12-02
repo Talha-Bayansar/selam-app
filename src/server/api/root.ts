@@ -4,8 +4,9 @@ import {
   memberRouter,
   groupRouter,
   genderRouter,
+  categoryRouter,
+  departmentRouter,
 } from "./routers";
-import { departmentRouter } from "./routers/department";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   groups: groupRouter,
   genders: genderRouter,
   departments: departmentRouter,
+  categories: categoryRouter,
 });
 
 // export type definition of API

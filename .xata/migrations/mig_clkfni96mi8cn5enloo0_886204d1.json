@@ -1,0 +1,19 @@
+{
+  "id": "mig_clkfni96mi8cn5enloo0",
+  "parentID": "mig_clkfn6p6mi8cn5enlon0",
+  "checksum": "1:886204d19f2e11b88a4a0900fd695acc2d570cfeb3dd9f48f9385598b58dccb6",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "department",
+          "type": "link",
+          "link": {
+            "table": "departments"
+          }
+        },
+        "table": "categories"
+      }
+    }
+  ]
+}

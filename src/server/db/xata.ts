@@ -143,6 +143,19 @@ const tables = [
       },
       { name: "organisation", type: "link", link: { table: "organisations" } },
     ],
+    revLinks: [{ column: "department", table: "categories" }],
+  },
+  {
+    name: "categories",
+    columns: [
+      {
+        name: "name",
+        type: "string",
+        notNull: true,
+        defaultValue: "undefined",
+      },
+      { name: "department", type: "link", link: { table: "departments" } },
+    ],
   },
 ] as const;
 
@@ -187,6 +200,9 @@ export type MembersGroupsRecord = MembersGroups & XataRecord;
 export type Departments = InferredTypes["departments"];
 export type DepartmentsRecord = Departments & XataRecord;
 
+export type Categories = InferredTypes["categories"];
+export type CategoriesRecord = Categories & XataRecord;
+
 export type DatabaseSchema = {
   nextauth_users: NextauthUsersRecord;
   nextauth_accounts: NextauthAccountsRecord;
@@ -200,6 +216,7 @@ export type DatabaseSchema = {
   genders: GendersRecord;
   members_groups: MembersGroupsRecord;
   departments: DepartmentsRecord;
+  categories: CategoriesRecord;
 };
 
 const DatabaseClient = buildClient();

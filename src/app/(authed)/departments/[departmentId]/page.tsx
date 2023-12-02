@@ -2,12 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  Button,
-  PageWrapper,
-  PageWrapperSkeleton,
-  ShowEmpty,
-} from "~/components";
+import { Button, PageWrapper, PageWrapperSkeleton } from "~/components";
+import { CategoriesList } from "~/departments";
 import { routes } from "~/lib";
 import { api } from "~/trpc/react";
 
@@ -51,10 +47,17 @@ const Page = ({ params }: Props) => {
 
   return (
     <PageWrapper className="flex flex-col gap-4 md:max-w-lg" title={data!.name}>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <Button asChild>
           <Link href={`${routes.departments}/${params.departmentId}/edit`}>
             Edit
+          </Link>
+        </Button>
+        <Button asChild>
+          <Link
+            href={`${routes.departments}/${params.departmentId}/create-category`}
+          >
+            Add
           </Link>
         </Button>
         <Button
@@ -65,7 +68,7 @@ const Page = ({ params }: Props) => {
           Delete
         </Button>
       </div>
-      <ShowEmpty />
+      <CategoriesList departmentId={params.departmentId} />
     </PageWrapper>
   );
 };
