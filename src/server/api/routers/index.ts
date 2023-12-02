@@ -4,3 +4,4 @@ export * from "./organisation";
 export * from "./gender";
 export * from "./department";
 export * from "./category";
+export * from "./activity";

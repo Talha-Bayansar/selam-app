@@ -1,0 +1,18 @@
+{
+  "id": "mig_cllp2se8ivt6d0dej570",
+  "parentID": "mig_cllp1oe8ivt6d0dej54g",
+  "checksum": "1:d86b842932df936077c7501a1275fe79d03c312a2f9ae4daad0268fa1d16abd9",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "start",
+          "type": "datetime",
+          "notNull": true,
+          "defaultValue": "now"
+        },
+        "table": "activities"
+      }
+    }
+  ]
+}

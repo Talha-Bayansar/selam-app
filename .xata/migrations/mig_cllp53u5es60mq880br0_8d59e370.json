@@ -1,0 +1,19 @@
+{
+  "id": "mig_cllp53u5es60mq880br0",
+  "parentID": "mig_cllp4n68ivt6d0dej6ig",
+  "checksum": "1:8d59e370b9abd4c6a729ca845b216e06a9bea5e186956921894365e7cdd3ad70",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "category",
+          "type": "link",
+          "link": {
+            "table": "categories"
+          }
+        },
+        "table": "activities"
+      }
+    }
+  ]
+}

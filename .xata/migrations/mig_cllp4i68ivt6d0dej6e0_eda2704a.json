@@ -1,0 +1,16 @@
+{
+  "id": "mig_cllp4i68ivt6d0dej6e0",
+  "parentID": "mig_cllp47u8ivt6d0dej62g",
+  "checksum": "1:eda2704af96e4ca16ff9dcf400dd0c463150c56f07e590f20704f557f8b4f3d9",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "test",
+          "type": "multiple"
+        },
+        "table": "activities"
+      }
+    }
+  ]
+}

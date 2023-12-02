@@ -1,0 +1,16 @@
+{
+  "id": "mig_cllp3065es60mq880bdg",
+  "parentID": "mig_cllp2se8ivt6d0dej570",
+  "checksum": "1:d4960657ba918f512b61bb1a68595ce27a5bd3657d1d9fb406bfbe445a679ed3",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "end",
+          "type": "datetime"
+        },
+        "table": "activities"
+      }
+    }
+  ]
+}

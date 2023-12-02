@@ -6,6 +6,7 @@ import {
   genderRouter,
   categoryRouter,
   departmentRouter,
+  activityRouter,
 } from "./routers";
 
 /**
@@ -20,6 +21,7 @@ export const appRouter = createTRPCRouter({
   genders: genderRouter,
   departments: departmentRouter,
   categories: categoryRouter,
+  activities: activityRouter,
 });
 
 // export type definition of API

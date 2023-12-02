@@ -6,6 +6,7 @@ export const routes = {
   members: "/members",
   groups: "/groups",
   departments: "/departments",
+  activities: "/activities",
   organisations: "/organisations",
   noAccess: "/no-access",
 };
