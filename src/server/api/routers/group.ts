@@ -159,6 +159,12 @@ export const groupRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { xata, session } = ctx;
 
+      const membersGroups = await xata.db.members_groups
+        .filter({
+          "group.id": input.id,
+        })
+        .getAll();
+
       const response = await xata.db.groups.delete({
         id: input.id,
         organization: session.user.organisation?.id,
@@ -170,14 +176,15 @@ export const groupRouter = createTRPCRouter({
           message: "Group with given ID could not be deleted.",
         });
 
-      const membersGroups = await xata.db.members_groups
-        .filter({
-          "group.id": input.id,
-        })
-        .getAll();
-
-      for (const memberGroup of membersGroups) {
-        await memberGroup.delete();
+      try {
+        for (const memberGroup of membersGroups) {
+          await memberGroup.delete();
+        }
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not delete members of this group.",
+        });
       }
 
       return response;

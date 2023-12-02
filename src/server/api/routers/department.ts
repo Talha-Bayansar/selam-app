@@ -117,6 +117,12 @@ export const departmentRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { xata, session } = ctx;
+      const categories = await xata.db.categories
+        .filter({
+          "department.id": input.id,
+        })
+        .getAll();
+
       const response = await xata.db.departments.delete({
         id: input.id,
         organisation: session.user.organisation?.id,
@@ -126,6 +132,17 @@ export const departmentRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Could not delete department.",
+        });
+      }
+
+      try {
+        for (const category of categories) {
+          await category.delete();
+        }
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not delete categories of this department.",
         });
       }
 

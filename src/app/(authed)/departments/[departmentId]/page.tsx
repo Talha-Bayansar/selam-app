@@ -35,9 +35,10 @@ const Page = ({ params }: Props) => {
 
   if (isLoading)
     return (
-      <PageWrapperSkeleton className="flex flex-col gap-4 md:max-w-lg">
-        <div className="grid grid-cols-2 gap-4">
+      <PageWrapperSkeleton className="flex flex-col gap-4">
+        <div className="grid grid-cols-3 gap-4 md:max-w-lg">
           <Button disabled>Edit</Button>
+          <Button disabled>Add</Button>
           <Button variant="destructive" disabled>
             Delete
           </Button>
@@ -46,8 +47,8 @@ const Page = ({ params }: Props) => {
     );
 
   return (
-    <PageWrapper className="flex flex-col gap-4 md:max-w-lg" title={data!.name}>
-      <div className="grid grid-cols-3 gap-4">
+    <PageWrapper className="flex flex-col gap-4" title={data!.name}>
+      <div className="grid grid-cols-3 gap-4 md:max-w-lg">
         <Button asChild>
           <Link href={`${routes.departments}/${params.departmentId}/edit`}>
             Edit

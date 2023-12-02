@@ -34,7 +34,7 @@ const Page = ({ params }: Props) => {
   return (
     <PageWrapper
       className="flex flex-grow flex-col md:max-w-lg"
-      title={data!.name}
+      title="Edit department"
     >
       <DepartmentsForm
         department={data as DepartmentsRecord}
