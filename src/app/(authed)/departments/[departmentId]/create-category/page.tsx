@@ -20,7 +20,10 @@ const Page = ({ params }: Props) => {
   });
 
   return (
-    <PageWrapper className="md:max-w-lg" title="New category">
+    <PageWrapper
+      className="flex flex-grow flex-col md:max-w-lg"
+      title="New category"
+    >
       <CategoriesForm
         isSubmitting={mutation.isLoading}
         onSubmit={(values) =>

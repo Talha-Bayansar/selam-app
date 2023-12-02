@@ -28,13 +28,16 @@ const Page = ({ params }: Props) => {
 
   if (isLoading)
     return (
-      <PageWrapperSkeleton>
+      <PageWrapperSkeleton className="flex flex-grow flex-col md:max-w-lg">
         <CategoriesFormSkeleton />
       </PageWrapperSkeleton>
     );
 
   return (
-    <PageWrapper title="Edit category">
+    <PageWrapper
+      className="flex flex-grow flex-col md:max-w-lg"
+      title="Edit category"
+    >
       <CategoriesForm
         category={data as CategoriesRecord}
         onSubmit={(values) =>
