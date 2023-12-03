@@ -19,6 +19,7 @@ export const activityRouter = createTRPCRouter({
           "department.organisation.id": session.user.organisation?.id,
         })
         .sort("start", "desc")
+        .select(["*", "category.*"])
         .getPaginated({
           pagination: {
             size: input.size,
