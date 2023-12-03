@@ -35,4 +35,32 @@ export const activityRouter = createTRPCRouter({
 
       return response;
     }),
+  create: protectedProcedure
+    .input(
+      z.object({
+        // departmentId: z.string().min(1),
+        name: z.string().min(1),
+        start: z.string().min(1),
+        end: z.string().optional(),
+        categoryId: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata } = ctx;
+      const response = await xata.db.activities.create({
+        name: input.name,
+        start: new Date(input.start),
+        end: input.end ? new Date(input.end) : undefined,
+        category: input.categoryId,
+        // department: input.departmentId,
+      });
+
+      if (!response)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Could not create activity with given input.",
+        });
+
+      return response;
+    }),
 });

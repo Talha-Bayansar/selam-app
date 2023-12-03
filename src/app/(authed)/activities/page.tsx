@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { ActivitiesList } from "~/activities";
 import { Button, PageWrapper } from "~/components";
+import { routes } from "~/lib";
 
 const Page = () => {
   return (
@@ -7,7 +9,9 @@ const Page = () => {
       className="flex flex-grow flex-col items-start gap-4"
       title="Activities"
     >
-      <Button className="w-full md:w-auto">New activity</Button>
+      <Button className="w-full md:w-auto">
+        <Link href={`${routes.activities}/create`}>New activity</Link>
+      </Button>
       <ActivitiesList />
     </PageWrapper>
   );
