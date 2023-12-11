@@ -19,7 +19,7 @@ export const activityRouter = createTRPCRouter({
           "department.organisation.id": session.user.organisation?.id,
         })
         .sort("start", "desc")
-        .select(["*", "category.*"])
+        .select(["*", "category.*", "department.*"])
         .getPaginated({
           pagination: {
             size: input.size,
@@ -31,6 +31,31 @@ export const activityRouter = createTRPCRouter({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Could not get activities with given input.",
+        });
+
+      return response;
+    }),
+  getById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+
+      const response = await xata.db.activities
+        .filter({
+          id: input.id,
+          "department.organisation.id": session.user.organisation?.id,
+        })
+        .select(["*", "category.*", "department.*"])
+        .getFirst();
+
+      if (!response)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Could not get activity with given ID.",
         });
 
       return response;

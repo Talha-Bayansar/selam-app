@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
 
+import Link from "next/link";
 import {
   ListTile,
   ListTileSkeleton,
   PaginationButton,
   ShowEmpty,
 } from "~/components";
-import { cn, generateArray, reducePages } from "~/lib";
+import { cn, generateArray, reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -29,6 +30,7 @@ export const ActivitiesList = (props: Props) => {
         {generateArray().map((val, i) => (
           <ListTileSkeleton
             key={val}
+            hasSubtitle
             isLastItem={generateArray().length > i + 1}
           />
         ))}
@@ -44,11 +46,15 @@ export const ActivitiesList = (props: Props) => {
   return (
     <div className={cn("flex w-full flex-col", props.className)}>
       {activities.records.map((activity, i) => (
-        <ListTile
-          key={activity.id}
-          title={activity.name ?? "undefined"}
-          isLastItem={activities.records.length > i + 1}
-        />
+        <Link key={activity.id} href={`${routes.activities}/${activity.id}`}>
+          <ListTile
+            title={`${
+              activity.category?.name ? `${activity.category.name}: ` : ""
+            }${activity.name ?? "undefined"}`}
+            subtitle={activity.department?.name ?? "undefined"}
+            isLastItem={activities.records.length > i + 1}
+          />
+        </Link>
       ))}
       <PaginationButton
         className="mt-4"
