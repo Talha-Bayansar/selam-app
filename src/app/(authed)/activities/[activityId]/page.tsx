@@ -1,6 +1,7 @@
 "use client";
 import { format } from "date-fns";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Button,
   PageWrapper,
@@ -18,12 +19,23 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
+  const router = useRouter();
   const { data, isLoading } = api.activities.getById.useQuery({
     id: params.activityId,
   });
+  const mutation = api.activities.deleteById.useMutation({
+    onSuccess: () => router.replace(routes.activities),
+  });
 
   const handleDelete = () => {
-    confirm("Are you sure you want to delete this activity?");
+    const hasConfirmed = confirm(
+      "Are you sure you want to delete this activity?",
+    );
+    if (hasConfirmed) {
+      mutation.mutate({
+        id: params.activityId,
+      });
+    }
   };
 
   if (isLoading)

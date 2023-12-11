@@ -88,4 +88,54 @@ export const activityRouter = createTRPCRouter({
 
       return response;
     }),
+  edit: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        departmentId: z.string().min(1),
+        name: z.string().min(1),
+        start: z.string().min(1),
+        end: z.string().optional(),
+        categoryId: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata } = ctx;
+      const response = await xata.db.activities.update({
+        id: input.id,
+        name: input.name,
+        start: new Date(input.start),
+        end: input.end ? new Date(input.end) : undefined,
+        category: input.categoryId,
+        department: input.departmentId,
+      });
+
+      if (!response)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Could not update activity with given input.",
+        });
+
+      return response;
+    }),
+  deleteById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata } = ctx;
+      const response = await xata.db.activities.delete({
+        id: input.id,
+      });
+
+      if (!response)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Could not delete activity.",
+        });
+
+      return response;
+    }),
 });
