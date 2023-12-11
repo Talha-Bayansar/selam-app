@@ -1,8 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { type DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
@@ -17,24 +15,27 @@ import {
   Input,
   Form,
   Skeleton,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Calendar,
+  DateRangeInput,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  InputSkeleton,
 } from "~/components";
-import { cn } from "~/lib";
+import { cn, generateArray } from "~/lib";
 import { type ActivitiesRecord } from "~/server/db";
-// import { api } from "~/trpc/react";
+import { api } from "~/trpc/react";
 
 const formSchema = z.object({
   name: z.string().min(1, "Required"),
   start: z.string().min(1, "Required"),
   end: z.string().optional(),
+  department: z.string().min(1, "Required"),
   category: z.string().optional(),
 });
 
 type Props = {
-  // departmentId: string;
   className?: string;
   activity?: ActivitiesRecord;
   isSubmitting: boolean;
@@ -42,9 +43,9 @@ type Props = {
 };
 
 export const ActivitiesForm = (props: Props) => {
-  // const {data, isLoading} = api.categories.getByDepartmentId.useQuery({
+  const { data: departments, isLoading: isLoadingDepartments } =
+    api.departments.getAll.useQuery({});
 
-  // });
   const [date, setDate] = useState<DateRange | undefined>({
     from: props.activity?.start
       ? new Date(props.activity.start.toString())
@@ -63,12 +64,28 @@ export const ActivitiesForm = (props: Props) => {
       end: props.activity?.end
         ? new Date(props.activity.end.toString()).toISOString()
         : undefined,
+      department: props.activity?.department?.id ?? "",
+      category: props.activity?.category?.id ?? "",
     },
   });
+  const {
+    data: categories,
+    // isLoading: isLoadingCategories,
+    isFetching: isFetchingCategories,
+  } = api.categories.getByDepartmentId.useQuery(
+    {
+      departmentId: form.getValues("department"),
+    },
+    {
+      enabled: !!form.getValues("department"),
+    },
+  );
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     props.onSubmit(values);
   }
+
+  if (isLoadingDepartments) return <ActivitiesFormSkeleton />;
 
   return (
     <Form {...form}>
@@ -93,72 +110,87 @@ export const ActivitiesForm = (props: Props) => {
               </FormItem>
             )}
           />
-          <label className="flex flex-col gap-3" htmlFor="date">
-            <span
-              className={cn(
-                "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-                {
-                  "text-destructive": form.getFieldState("start").error,
-                },
-              )}
-            >
-              Date*
-            </span>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  id="date"
-                  variant={"outline"}
-                  className={cn(
-                    "justify-start text-left font-normal",
-                    !date && "text-muted-foreground",
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date?.from ? (
-                    date.to ? (
-                      <>
-                        {format(date.from, "dd/MM/yyyy")} -{" "}
-                        {format(date.to, "dd/MM/yyyy")}
-                      </>
-                    ) : (
-                      format(date.from, "dd/MM/yyyy")
-                    )
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  initialFocus
-                  mode="range"
-                  defaultMonth={date?.from}
-                  selected={date}
-                  onSelect={(values) => {
-                    form.clearErrors("start");
-                    let date = values;
-                    if (
-                      values?.from?.toISOString() === values?.to?.toISOString()
-                    ) {
-                      date = { from: values?.from, to: undefined };
-                    }
 
-                    form.setValue("start", date?.from?.toISOString() ?? "");
+          <DateRangeInput
+            label="Date"
+            name="date"
+            required
+            date={date}
+            error={form.getFieldState("start").error}
+            defaultMonth={date?.from}
+            selected={date}
+            onSelect={(values) => {
+              form.clearErrors("start");
+              let date = values;
+              if (values?.from?.toISOString() === values?.to?.toISOString()) {
+                date = { from: values?.from, to: undefined };
+              }
 
-                    form.setValue("end", date?.to?.toISOString() ?? "");
+              form.setValue("start", date?.from?.toISOString() ?? "");
 
-                    setDate(date);
-                  }}
-                />
-              </PopoverContent>
-            </Popover>
-            {form.getFieldState("start").error && (
-              <p className="text-sm font-medium text-destructive">
-                Start date is required
-              </p>
+              form.setValue("end", date?.to?.toISOString() ?? "");
+
+              setDate(date);
+            }}
+          />
+          <FormField
+            control={form.control}
+            name="department"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Department*</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {departments?.records.map((department) => (
+                        <SelectItem key={department.id} value={department.id}>
+                          {department.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          </label>
+          />
+          {isFetchingCategories ? (
+            <InputSkeleton />
+          ) : (
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories?.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
         </div>
 
         <Button type="submit" disabled={props.isSubmitting}>
@@ -173,18 +205,9 @@ export const ActivitiesFormSkeleton = () => {
   return (
     <div className="flex flex-grow flex-col justify-between gap-8 md:justify-normal">
       <div className="flex flex-col gap-8">
-        <div className="flex w-full flex-col gap-4">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-        <div className="flex w-full flex-col gap-4">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-10 w-full" />
-        </div>
-        <div className="flex w-full flex-col gap-4">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-10 w-full" />
-        </div>
+        {generateArray(4).map((val) => (
+          <InputSkeleton key={val} />
+        ))}
       </div>
       <Skeleton className="h-10 w-full" />
     </div>

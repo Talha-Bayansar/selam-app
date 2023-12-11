@@ -17,7 +17,15 @@ const Page = () => {
     >
       <ActivitiesForm
         isSubmitting={mutation.isLoading}
-        onSubmit={mutation.mutate}
+        onSubmit={(values) =>
+          mutation.mutate({
+            departmentId: values.department,
+            categoryId: values.category,
+            name: values.name,
+            start: values.start,
+            end: values.end,
+          })
+        }
       />
     </PageWrapper>
   );

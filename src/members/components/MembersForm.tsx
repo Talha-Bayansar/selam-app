@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
   Select,
+  InputSkeleton,
 } from "~/components";
 import { api } from "~/trpc/react";
 import { cn, generateArray } from "~/lib";
@@ -179,10 +180,7 @@ export const MembersFormSkeleton = () => {
     <div className="flex flex-grow flex-col justify-between gap-8 md:justify-normal">
       <div className="flex flex-col gap-4">
         {generateArray(6).map((val) => (
-          <div key={val} className="flex w-full flex-col gap-4">
-            <Skeleton className="h-4 w-16" />
-            <Skeleton className="h-10 w-full" />
-          </div>
+          <InputSkeleton key={val} />
         ))}
       </div>
       <Skeleton className="h-10 w-full" />

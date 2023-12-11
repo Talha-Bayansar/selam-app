@@ -38,7 +38,7 @@ export const activityRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        // departmentId: z.string().min(1),
+        departmentId: z.string().min(1),
         name: z.string().min(1),
         start: z.string().min(1),
         end: z.string().optional(),
@@ -52,7 +52,7 @@ export const activityRouter = createTRPCRouter({
         start: new Date(input.start),
         end: input.end ? new Date(input.end) : undefined,
         category: input.categoryId,
-        // department: input.departmentId,
+        department: input.departmentId,
       });
 
       if (!response)

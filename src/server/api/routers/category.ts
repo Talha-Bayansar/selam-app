@@ -5,6 +5,23 @@ import { TRPCError } from "@trpc/server";
 import { type CategoriesRecord } from "~/server/db";
 
 export const categoryRouter = createTRPCRouter({
+  getAll: protectedProcedure.query(async ({ ctx }) => {
+    const { xata, session } = ctx;
+    const response = await xata.db.categories
+      .filter({
+        "department.organisation.id": session.user.organisation?.id,
+      })
+      .sort("name", "asc")
+      .getMany();
+
+    if (!response)
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Could not get categories.",
+      });
+
+    return response as CategoriesRecord[];
+  }),
   getByDepartmentId: protectedProcedure
     .input(
       z.object({
