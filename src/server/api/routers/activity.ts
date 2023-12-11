@@ -75,7 +75,7 @@ export const activityRouter = createTRPCRouter({
       const response = await xata.db.activities.create({
         name: input.name,
         start: new Date(input.start),
-        end: input.end ? new Date(input.end) : undefined,
+        end: input.end ? new Date(input.end) : null,
         category: input.categoryId,
         department: input.departmentId,
       });
@@ -105,7 +105,7 @@ export const activityRouter = createTRPCRouter({
         id: input.id,
         name: input.name,
         start: new Date(input.start),
-        end: input.end ? new Date(input.end) : undefined,
+        end: input.end ? new Date(input.end) : null,
         category: input.categoryId,
         department: input.departmentId,
       });
