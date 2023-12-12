@@ -1,0 +1,19 @@
+{
+  "id": "mig_cls2ke0n92nsbftmfdug",
+  "parentID": "mig_cls2k9dfl05jup8q8ecg",
+  "checksum": "1:7594eb4ddbd2684cd1771a9575c64622515b626b77cdec3c6cfeb177b96e5de7",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "activity",
+          "type": "link",
+          "link": {
+            "table": "activities"
+          }
+        },
+        "table": "members_activities"
+      }
+    }
+  ]
+}

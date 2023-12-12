@@ -91,6 +91,63 @@ export const memberRouter = createTRPCRouter({
 
       return membersByGroup;
     }),
+  getByActivityId: protectedProcedure
+    .input(
+      z.object({
+        activityId: z.string().min(1),
+        size: z.number().min(1).max(100).optional(),
+        cursor: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const membersActivity = await xata.db.members_activities
+        .filter({
+          "activity.id": input.activityId,
+          "member.organization.id": session.user.organisation?.id,
+        })
+        .sort("member.firstName", "asc")
+        .select(["member.*"])
+        .getPaginated({
+          pagination: {
+            size: input.size ?? 30,
+            after: input.cursor,
+          },
+        });
+
+      if (!membersActivity)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Something went wrong while getting the members.",
+        });
+
+      return membersActivity;
+    }),
+  getAllByActivityId: protectedProcedure
+    .input(
+      z.object({
+        activityId: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      const membersActivity = await xata.db.members_activities
+        .filter({
+          "activity.id": input.activityId,
+          "member.organization.id": session.user.organisation?.id,
+        })
+        .sort("member.firstName", "asc")
+        .select(["member.*"])
+        .getAll();
+
+      if (!membersActivity)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Something went wrong while getting the members.",
+        });
+
+      return membersActivity;
+    }),
   getAllByGroupID: protectedProcedure
     .input(
       z.object({

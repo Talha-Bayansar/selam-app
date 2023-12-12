@@ -110,7 +110,10 @@ const tables = [
       { name: "gender", type: "link", link: { table: "genders" } },
       { name: "organization", type: "link", link: { table: "organisations" } },
     ],
-    revLinks: [{ column: "member", table: "members_groups" }],
+    revLinks: [
+      { column: "member", table: "members_groups" },
+      { column: "member", table: "members_activities" },
+    ],
   },
   {
     name: "groups",
@@ -170,6 +173,14 @@ const tables = [
       { name: "department", type: "link", link: { table: "departments" } },
       { name: "category", type: "link", link: { table: "categories" } },
     ],
+    revLinks: [{ column: "activity", table: "members_activities" }],
+  },
+  {
+    name: "members_activities",
+    columns: [
+      { name: "member", type: "link", link: { table: "members" } },
+      { name: "activity", type: "link", link: { table: "activities" } },
+    ],
   },
 ] as const;
 
@@ -220,6 +231,9 @@ export type CategoriesRecord = Categories & XataRecord;
 export type Activities = InferredTypes["activities"];
 export type ActivitiesRecord = Activities & XataRecord;
 
+export type MembersActivities = InferredTypes["members_activities"];
+export type MembersActivitiesRecord = MembersActivities & XataRecord;
+
 export type DatabaseSchema = {
   nextauth_users: NextauthUsersRecord;
   nextauth_accounts: NextauthAccountsRecord;
@@ -235,6 +249,7 @@ export type DatabaseSchema = {
   departments: DepartmentsRecord;
   categories: CategoriesRecord;
   activities: ActivitiesRecord;
+  members_activities: MembersActivitiesRecord;
 };
 
 const DatabaseClient = buildClient();

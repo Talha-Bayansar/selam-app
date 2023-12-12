@@ -10,6 +10,7 @@ import {
   Skeleton,
 } from "~/components";
 import { routes } from "~/lib";
+import { AttendeesList } from "~/members";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -20,9 +21,10 @@ type Props = {
 
 const Page = ({ params }: Props) => {
   const router = useRouter();
-  const { data, isLoading } = api.activities.getById.useQuery({
-    id: params.activityId,
-  });
+  const { data: activity, isLoading: isLoadingActivity } =
+    api.activities.getById.useQuery({
+      id: params.activityId,
+    });
   const mutation = api.activities.deleteById.useMutation({
     onSuccess: () => router.replace(routes.activities),
   });
@@ -38,10 +40,11 @@ const Page = ({ params }: Props) => {
     }
   };
 
-  if (isLoading)
+  if (isLoadingActivity)
     return (
       <PageWrapperSkeleton className="flex flex-col gap-4 md:max-w-lg">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
+          <Skeleton className="h-10" />
           <Skeleton className="h-10" />
           <Skeleton className="h-10" />
         </div>
@@ -53,13 +56,23 @@ const Page = ({ params }: Props) => {
         </div>
       </PageWrapperSkeleton>
     );
-  if (!data) return <ShowEmpty />;
+  if (!activity) return <ShowEmpty />;
   return (
-    <PageWrapper className="flex flex-col gap-4 md:max-w-lg" title={data.name!}>
-      <div className="grid grid-cols-2 gap-4">
+    <PageWrapper
+      className="flex flex-col gap-4 md:max-w-lg"
+      title={activity.name!}
+    >
+      <div className="grid grid-cols-3 gap-4">
         <Button asChild>
           <Link href={`${routes.activities}/${params.activityId}/edit`}>
             Edit
+          </Link>
+        </Button>
+        <Button asChild>
+          <Link
+            href={`${routes.activities}/${params.activityId}/add-attendees`}
+          >
+            Add
           </Link>
         </Button>
         <Button variant="destructive" onClick={handleDelete}>
@@ -69,14 +82,15 @@ const Page = ({ params }: Props) => {
       <div className="flex flex-col">
         <div>
           Date:{" "}
-          {data.start
-            ? format(new Date(data.start), "dd/MM/yyyy")
+          {activity.start
+            ? format(new Date(activity.start), "dd/MM/yyyy")
             : "undefined"}
-          {data.end && ` - ${format(new Date(data.end), "dd/MM/yyyy")}`}
+          {activity.end && ` - ${format(new Date(activity.end), "dd/MM/yyyy")}`}
         </div>
-        <div>Department: {data.department?.name ?? "undefined"}</div>
-        <div>Category: {data.category?.name ?? "undefined"}</div>
+        <div>Department: {activity.department?.name ?? "undefined"}</div>
+        <div>Category: {activity.category?.name ?? "undefined"}</div>
       </div>
+      <AttendeesList activityId={params.activityId} />
     </PageWrapper>
   );
 };

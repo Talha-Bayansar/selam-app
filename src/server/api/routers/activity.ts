@@ -60,6 +60,37 @@ export const activityRouter = createTRPCRouter({
 
       return response;
     }),
+  addMembers: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        addMemberIds: z.string().array(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+
+      if (session.user.organisation?.id) {
+        try {
+          for (const memberId of input.addMemberIds) {
+            await xata.db.members_activities.create({
+              activity: input.id,
+              member: memberId,
+            });
+          }
+        } catch (error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Something went wrong while adding the members.",
+          });
+        }
+      } else {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "No organisation found.",
+        });
+      }
+    }),
   create: protectedProcedure
     .input(
       z.object({
