@@ -72,6 +72,7 @@ export const ActivitiesForm = (props: Props) => {
     data: categories,
     // isLoading: isLoadingCategories,
     isFetching: isFetchingCategories,
+    refetch: refetchCategories,
   } = api.categories.getByDepartmentId.useQuery(
     {
       departmentId: form.getValues("department"),
@@ -141,7 +142,11 @@ export const ActivitiesForm = (props: Props) => {
                 <FormLabel>Department*</FormLabel>
                 <FormControl>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={async (values) => {
+                      field.onChange(values);
+                      form.setValue("category", "");
+                      await refetchCategories();
+                    }}
                     defaultValue={field.value}
                   >
                     <SelectTrigger className="w-full">

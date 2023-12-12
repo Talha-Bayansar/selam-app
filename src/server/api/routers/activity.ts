@@ -137,7 +137,7 @@ export const activityRouter = createTRPCRouter({
         name: input.name,
         start: new Date(input.start),
         end: input.end ? new Date(input.end) : null,
-        category: input.categoryId,
+        category: input.categoryId ? input.categoryId : null,
         department: input.departmentId,
       });
 

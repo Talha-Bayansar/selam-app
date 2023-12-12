@@ -90,7 +90,10 @@ const Page = ({ params }: Props) => {
         <div>Department: {activity.department?.name ?? "undefined"}</div>
         <div>Category: {activity.category?.name ?? "undefined"}</div>
       </div>
-      <AttendeesList activityId={params.activityId} />
+      <div className="flex flex-col gap-4">
+        <h2 className="text-2xl underline">Attendees</h2>
+        <AttendeesList activityId={params.activityId} />
+      </div>
     </PageWrapper>
   );
 };
