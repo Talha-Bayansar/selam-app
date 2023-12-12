@@ -42,8 +42,8 @@ const Page = ({ params }: Props) => {
 
   if (isLoadingActivity)
     return (
-      <PageWrapperSkeleton className="flex flex-col gap-4 md:max-w-lg">
-        <div className="grid grid-cols-3 gap-4">
+      <PageWrapperSkeleton className="flex flex-col gap-4">
+        <div className="grid grid-cols-3 gap-4 md:max-w-lg">
           <Skeleton className="h-10" />
           <Skeleton className="h-10" />
           <Skeleton className="h-10" />
@@ -58,11 +58,8 @@ const Page = ({ params }: Props) => {
     );
   if (!activity) return <ShowEmpty />;
   return (
-    <PageWrapper
-      className="flex flex-col gap-4 md:max-w-lg"
-      title={activity.name!}
-    >
-      <div className="grid grid-cols-3 gap-4">
+    <PageWrapper className="flex flex-col gap-4" title={activity.name!}>
+      <div className="grid grid-cols-3 gap-4 md:max-w-lg">
         <Button asChild>
           <Link href={`${routes.activities}/${params.activityId}/edit`}>
             Edit

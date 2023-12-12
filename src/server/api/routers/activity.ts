@@ -157,6 +157,13 @@ export const activityRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { xata } = ctx;
+
+      const membersActivities = await xata.db.members_activities
+        .filter({
+          "activity.id": input.id,
+        })
+        .getAll();
+
       const response = await xata.db.activities.delete({
         id: input.id,
       });
@@ -164,9 +171,46 @@ export const activityRouter = createTRPCRouter({
       if (!response)
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Could not delete activity.",
+          message: "Activity with given ID could not be deleted.",
         });
 
+      try {
+        for (const memberActivity of membersActivities) {
+          await memberActivity.delete();
+        }
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Could not delete members of this activity.",
+        });
+      }
+
       return response;
+    }),
+  deleteMemberFromActivity: protectedProcedure
+    .input(
+      z.object({
+        memberActivityId: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { xata, session } = ctx;
+      if (session.user.organisation?.id) {
+        const response = await xata.db.members_activities.delete({
+          id: input.memberActivityId,
+        });
+
+        if (!response)
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Could not delete member from activity.",
+          });
+
+        return response;
+      } else
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not part of an organisation.",
+        });
     }),
 });

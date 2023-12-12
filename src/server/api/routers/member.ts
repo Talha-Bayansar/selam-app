@@ -107,7 +107,7 @@ export const memberRouter = createTRPCRouter({
           "member.organization.id": session.user.organisation?.id,
         })
         .sort("member.firstName", "asc")
-        .select(["member.*"])
+        .select(["member.*", "activity.*"])
         .getPaginated({
           pagination: {
             size: input.size ?? 30,
