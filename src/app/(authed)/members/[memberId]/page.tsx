@@ -60,7 +60,7 @@ const Page = ({ params }: Props) => {
 
   return (
     <PageWrapper
-      className="flex flex-col gap-4 md:max-w-lg"
+      className="flex flex-col items-start gap-4"
       title={`${data?.firstName} ${data?.lastName}`}
     >
       <ActionsButton

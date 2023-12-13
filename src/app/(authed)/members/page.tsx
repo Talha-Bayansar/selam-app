@@ -34,7 +34,7 @@ const Page = () => {
     >
       <ActionsButton
         actions={[
-          <Button key="new-member" asChild className="w-full md:w-auto">
+          <Button key="new-member" asChild>
             <Link href={`${routes.members}/create`}>New member</Link>
           </Button>,
         ]}
