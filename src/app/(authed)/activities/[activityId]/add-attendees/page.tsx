@@ -8,7 +8,7 @@ import {
   ListTileSkeleton,
   PageWrapper,
   PaginationButton,
-  ShowEmpty,
+  NoData,
 } from "~/components";
 import { cn, generateArray, reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
@@ -74,7 +74,7 @@ const Page = ({ params }: Props) => {
           />
         ))
       ) : !membersData || !members || members.records.length < 1 ? (
-        <ShowEmpty />
+        <NoData />
       ) : (
         <div className="flex flex-col gap-4">
           <Button

@@ -1,10 +1,5 @@
 "use client";
-import {
-  ListSkeleton,
-  ListTile,
-  PaginationButton,
-  ShowEmpty,
-} from "~/components";
+import { ListSkeleton, ListTile, PaginationButton, NoData } from "~/components";
 import { reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
 
@@ -43,6 +38,6 @@ export const GroupsList = () => {
       />
     </div>
   ) : (
-    <ShowEmpty />
+    <NoData />
   );
 };

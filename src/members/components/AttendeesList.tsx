@@ -12,7 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  ShowEmpty,
+  NoData,
 } from "~/components";
 import { reducePages } from "~/lib";
 import { type MembersActivitiesRecord } from "~/server/db";
@@ -47,10 +47,10 @@ export const AttendeesList = ({ activityId }: Props) => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (!data) return <ShowEmpty />;
+  if (!data) return <NoData />;
 
   const membersActivity = reducePages(data.pages);
-  if (membersActivity.records.length < 1) return <ShowEmpty />;
+  if (membersActivity.records.length < 1) return <NoData />;
 
   return (
     <div className="flex flex-col">

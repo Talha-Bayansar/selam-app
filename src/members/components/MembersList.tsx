@@ -1,7 +1,7 @@
 "use client";
 import { format } from "date-fns";
 import React from "react";
-import { ListTile, ShowEmpty } from "~/components";
+import { ListTile, NoData } from "~/components";
 import { cn, routes } from "~/lib";
 import { type MembersRecord } from "~/server/db";
 
@@ -32,7 +32,7 @@ export const MembersList = ({ members, ...props }: Props) => {
           );
         })
       ) : (
-        <ShowEmpty />
+        <NoData />
       )}
     </div>
   );

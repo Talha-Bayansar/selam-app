@@ -6,7 +6,7 @@ import {
   ListSkeleton,
   PageWrapper,
   PaginationButton,
-  ShowEmpty,
+  NoData,
 } from "~/components";
 import { reducePages, routes } from "~/lib";
 import { MembersList } from "~/members";
@@ -46,7 +46,7 @@ const Page = () => {
           />
         </>
       ) : (
-        <ShowEmpty />
+        <NoData />
       )}
     </PageWrapper>
   );

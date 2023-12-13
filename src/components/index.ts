@@ -3,7 +3,7 @@ export * from "./ui";
 export * from "./layout";
 export * from "./Unauthenticated";
 export * from "./NoOrganisation";
-export * from "./ShowEmpty";
+export * from "./NoData";
 export * from "./ListSkeleton";
 export * from "./DateRangeInput";
 export * from "./InputSkeleton";

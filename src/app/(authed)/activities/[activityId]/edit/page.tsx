@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { ActivitiesForm, ActivitiesFormSkeleton } from "~/activities";
-import { PageWrapper, PageWrapperSkeleton, ShowEmpty } from "~/components";
+import { PageWrapper, PageWrapperSkeleton, NoData } from "~/components";
 import { routes } from "~/lib";
 import { type ActivitiesRecord } from "~/server/db";
 import { api } from "~/trpc/react";
@@ -27,7 +27,7 @@ const Page = ({ params }: Props) => {
         <ActivitiesFormSkeleton />
       </PageWrapperSkeleton>
     );
-  if (!data) return <ShowEmpty />;
+  if (!data) return <NoData />;
   return (
     <PageWrapper className="flex flex-grow md:max-w-lg" title={data.name!}>
       <ActivitiesForm

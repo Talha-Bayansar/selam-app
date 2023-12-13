@@ -11,7 +11,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  ShowEmpty,
+  NoData,
 } from "~/components";
 import { generateArray, routes } from "~/lib";
 import { type CategoriesRecord } from "~/server/db";
@@ -50,7 +50,7 @@ export const CategoriesList = ({ departmentId, ...props }: Props) => {
       </div>
     );
 
-  if (!data || data.length <= 0) return <ShowEmpty />;
+  if (!data || data.length <= 0) return <NoData />;
 
   return (
     <div {...props}>

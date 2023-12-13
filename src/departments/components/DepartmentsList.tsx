@@ -1,10 +1,5 @@
 "use client";
-import {
-  ListSkeleton,
-  ListTile,
-  PaginationButton,
-  ShowEmpty,
-} from "~/components";
+import { ListSkeleton, ListTile, PaginationButton, NoData } from "~/components";
 import { cn, reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
 
@@ -23,7 +18,7 @@ export const DepartmentsList = (props: Props) => {
 
   if (isLoading) return <ListSkeleton withSubtitle={false} />;
 
-  if (!departments || departments.records.length <= 0) return <ShowEmpty />;
+  if (!departments || departments.records.length <= 0) return <NoData />;
 
   return (
     <div {...props} className={cn("flex w-full flex-col", props.className)}>

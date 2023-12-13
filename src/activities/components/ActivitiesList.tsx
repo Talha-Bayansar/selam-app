@@ -6,7 +6,7 @@ import {
   ListTile,
   ListTileSkeleton,
   PaginationButton,
-  ShowEmpty,
+  NoData,
 } from "~/components";
 import { cn, generateArray, reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
@@ -37,11 +37,11 @@ export const ActivitiesList = (props: Props) => {
       </div>
     );
 
-  if (!data) return <ShowEmpty />;
+  if (!data) return <NoData />;
 
   const activities = reducePages(data.pages);
 
-  if (activities.records.length <= 0) return <ShowEmpty />;
+  if (activities.records.length <= 0) return <NoData />;
 
   return (
     <div className={cn("flex w-full flex-col", props.className)}>

@@ -12,7 +12,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  ShowEmpty,
+  NoData,
 } from "~/components";
 import { cn, reducePages } from "~/lib";
 import { type MembersGroupsRecord } from "~/server/db";
@@ -94,7 +94,7 @@ export const GroupMembers = ({ groupId, ...props }: Props) => {
           </Sheet>
         ))
       ) : (
-        <ShowEmpty />
+        <NoData />
       )}
       <PaginationButton
         canLoadMore={members?.meta.page.more ?? false}

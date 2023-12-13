@@ -6,7 +6,7 @@ import {
   Button,
   PageWrapper,
   PageWrapperSkeleton,
-  ShowEmpty,
+  NoData,
   Skeleton,
 } from "~/components";
 import { routes } from "~/lib";
@@ -56,7 +56,7 @@ const Page = ({ params }: Props) => {
         </div>
       </PageWrapperSkeleton>
     );
-  if (!activity) return <ShowEmpty />;
+  if (!activity) return <NoData />;
   return (
     <PageWrapper className="flex flex-col gap-4" title={activity.name!}>
       <div className="grid grid-cols-3 gap-4 md:max-w-lg">
