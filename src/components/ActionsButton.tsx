@@ -37,7 +37,7 @@ export const ActionsButton = ({ actions, ...props }: Props) => {
         <SheetHeader>
           <SheetTitle>Actions</SheetTitle>
         </SheetHeader>
-        <SheetFooter className="sm:flex-col md:w-auto md:items-start">
+        <SheetFooter className="flex-col gap-4 md:gap-0">
           {actions.map((action) => (
             <SheetClose key={action.key} asChild>
               {action}

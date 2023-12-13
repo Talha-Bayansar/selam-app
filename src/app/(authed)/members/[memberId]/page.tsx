@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  ActionsButton,
   Button,
   PageWrapper,
   PageWrapperSkeleton,
@@ -62,14 +63,20 @@ const Page = ({ params }: Props) => {
       className="flex flex-col gap-4 md:max-w-lg"
       title={`${data?.firstName} ${data?.lastName}`}
     >
-      <div className="grid grid-cols-2 gap-4">
-        <Button asChild>
-          <Link href={`${routes.members}/${params.memberId}/edit`}>Edit</Link>
-        </Button>
-        <Button variant="destructive" onClick={handleDelete}>
-          Delete
-        </Button>
-      </div>
+      <ActionsButton
+        actions={[
+          <Button key="edit-member" asChild>
+            <Link href={`${routes.members}/${params.memberId}/edit`}>Edit</Link>
+          </Button>,
+          <Button
+            key="delete member"
+            variant="destructive"
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>,
+        ]}
+      />
       <div className="flex flex-col">
         <div>
           Date of birth:{" "}
