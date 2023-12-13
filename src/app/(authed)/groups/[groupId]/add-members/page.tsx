@@ -79,9 +79,12 @@ const Page = ({ params }: Props) => {
     );
 
   return (
-    <PageWrapper className="flex flex-col gap-4" title={group!.name!}>
+    <PageWrapper
+      className="flex flex-col items-start gap-4"
+      title={group!.name!}
+    >
       <Button
-        className="md:max-w-lg"
+        className="w-full md:w-auto"
         onClick={() =>
           mutation.mutate({
             groupId: params.groupId,
@@ -97,7 +100,7 @@ const Page = ({ params }: Props) => {
       >
         Add members
       </Button>
-      <div className="flex flex-col">
+      <div className="flex w-full flex-col">
         {membersIsLoading || membersGroupIsLoading
           ? generateArray(20).map((item, i) => (
               <ListTileSkeleton

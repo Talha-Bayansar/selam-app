@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  ActionsButton,
   Button,
   ListTileSkeleton,
   PageWrapper,
@@ -41,13 +42,7 @@ const Page = ({ params }: Props) => {
   if (groupIsLoading) {
     return (
       <PageWrapperSkeleton className="flex flex-col gap-4">
-        <div className="grid grid-cols-3 gap-4 md:max-w-lg">
-          <Button disabled>Edit</Button>
-          <Button disabled>Add</Button>
-          <Button variant="destructive" disabled>
-            Delete
-          </Button>
-        </div>
+        <ActionsButton actions={[]} />
         {generateArray().map((val, i) => (
           <ListTileSkeleton
             key={val}
@@ -59,20 +54,31 @@ const Page = ({ params }: Props) => {
     );
   }
   return (
-    <PageWrapper className="flex flex-col gap-4" title={group!.name!}>
-      <div className="grid grid-cols-3 gap-4 md:max-w-lg">
-        <Button asChild>
-          <Link href={`${routes.groups}/${params.groupId}/edit`}>Edit</Link>
-        </Button>
-        <Button asChild>
-          <Link href={`${routes.groups}/${params.groupId}/add-members`}>
-            Add
-          </Link>
-        </Button>
-        <Button variant="destructive" onClick={handleDelete}>
-          Delete
-        </Button>
-      </div>
+    <PageWrapper
+      className="flex flex-col items-start gap-4"
+      title={group!.name!}
+    >
+      <ActionsButton
+        actions={[
+          <Button key="edit-group" asChild>
+            <Link href={`${routes.groups}/${params.groupId}/edit`}>
+              Edit group
+            </Link>
+          </Button>,
+          <Button key="add-members" asChild>
+            <Link href={`${routes.groups}/${params.groupId}/add-members`}>
+              Add members
+            </Link>
+          </Button>,
+          <Button
+            key="delete-group"
+            variant="destructive"
+            onClick={handleDelete}
+          >
+            Delete group
+          </Button>,
+        ]}
+      />
       <GroupMembers groupId={params.groupId} />
     </PageWrapper>
   );
