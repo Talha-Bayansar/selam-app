@@ -71,12 +71,13 @@ export default function AuthLayout({ children }: Props) {
           <Loader2 size={40} className="animate-spin text-primary" />
         </div>
       );
+
     case "authenticated":
-      return (
-        <Layout>
-          {session.data.user.organisation ? children : <NoOrganisation />}
-        </Layout>
-      );
+      if (session.data.user.organisation) {
+        return <Layout>{children}</Layout>;
+      } else {
+        return <NoOrganisation />;
+      }
 
     default:
       return <Unauthenticated />;
