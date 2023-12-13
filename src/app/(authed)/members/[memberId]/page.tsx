@@ -43,12 +43,9 @@ const Page = ({ params }: Props) => {
 
   if (isLoading) {
     return (
-      <PageWrapperSkeleton className="flex flex-col gap-4 md:max-w-lg">
-        <div className="grid grid-cols-2 gap-4">
-          <Skeleton className="h-10" />
-          <Skeleton className="h-10" />
-        </div>
-        <div className="flex flex-col gap-2">
+      <PageWrapperSkeleton className="flex flex-col items-start gap-4">
+        <ActionsButton actions={[]} />
+        <div className="flex w-full flex-col">
           <Skeleton className="h-4 w-64" />
           <Skeleton className="h-4 w-64" />
           <Skeleton className="h-4 w-64" />
@@ -66,14 +63,16 @@ const Page = ({ params }: Props) => {
       <ActionsButton
         actions={[
           <Button key="edit-member" asChild>
-            <Link href={`${routes.members}/${params.memberId}/edit`}>Edit</Link>
+            <Link href={`${routes.members}/${params.memberId}/edit`}>
+              Edit member
+            </Link>
           </Button>,
           <Button
             key="delete member"
             variant="destructive"
             onClick={handleDelete}
           >
-            Delete
+            Delete member
           </Button>,
         ]}
       />

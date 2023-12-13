@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button, PageWrapper, PageWrapperSkeleton } from "~/components";
+import {
+  ActionsButton,
+  Button,
+  PageWrapper,
+  PageWrapperSkeleton,
+} from "~/components";
 import { CategoriesList } from "~/departments";
 import { routes } from "~/lib";
 import { api } from "~/trpc/react";
@@ -35,40 +40,37 @@ const Page = ({ params }: Props) => {
 
   if (isLoading)
     return (
-      <PageWrapperSkeleton className="flex flex-col gap-4">
-        <div className="grid grid-cols-3 gap-4 md:max-w-lg">
-          <Button disabled>Edit</Button>
-          <Button disabled>Add</Button>
-          <Button variant="destructive" disabled>
-            Delete
-          </Button>
-        </div>
+      <PageWrapperSkeleton className="flex flex-col items-start gap-4">
+        <ActionsButton actions={[]} />
       </PageWrapperSkeleton>
     );
 
   return (
-    <PageWrapper className="flex flex-col gap-4" title={data!.name}>
-      <div className="grid grid-cols-3 gap-4 md:max-w-lg">
-        <Button asChild>
-          <Link href={`${routes.departments}/${params.departmentId}/edit`}>
-            Edit
-          </Link>
-        </Button>
-        <Button asChild>
-          <Link
-            href={`${routes.departments}/${params.departmentId}/create-category`}
+    <PageWrapper className="flex flex-col items-start gap-4" title={data!.name}>
+      <ActionsButton
+        actions={[
+          <Button key="edit-department" asChild>
+            <Link href={`${routes.departments}/${params.departmentId}/edit`}>
+              Edit department
+            </Link>
+          </Button>,
+          <Button key="add-category" asChild>
+            <Link
+              href={`${routes.departments}/${params.departmentId}/create-category`}
+            >
+              Add category
+            </Link>
+          </Button>,
+          <Button
+            key="delete department"
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={mutation.isLoading}
           >
-            Add
-          </Link>
-        </Button>
-        <Button
-          variant="destructive"
-          onClick={handleDelete}
-          disabled={mutation.isLoading}
-        >
-          Delete
-        </Button>
-      </div>
+            Delete department
+          </Button>,
+        ]}
+      />
       <CategoriesList departmentId={params.departmentId} />
     </PageWrapper>
   );

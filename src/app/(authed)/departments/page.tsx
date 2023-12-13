@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, PageWrapper } from "~/components";
+import { ActionsButton, Button, PageWrapper } from "~/components";
 import { DepartmentsList } from "~/departments";
 import { routes } from "~/lib";
 
@@ -9,9 +9,13 @@ const Page = () => {
       className="flex flex-col items-start gap-4"
       title="Departments"
     >
-      <Button className="w-full md:w-auto" asChild>
-        <Link href={`${routes.departments}/create`}>New department</Link>
-      </Button>
+      <ActionsButton
+        actions={[
+          <Button key="new-department" asChild>
+            <Link href={`${routes.departments}/create`}>New department</Link>
+          </Button>,
+        ]}
+      />
       <DepartmentsList />
     </PageWrapper>
   );
