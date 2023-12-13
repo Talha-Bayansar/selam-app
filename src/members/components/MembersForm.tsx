@@ -11,16 +11,18 @@ import {
   FormMessage,
   Button,
   Input,
-  Skeleton,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
   Select,
   InputSkeleton,
+  ButtonSkeleton,
+  ErrorData,
+  NoData,
 } from "~/components";
 import { api } from "~/trpc/react";
-import { cn, generateArray } from "~/lib";
+import { cn, generateArray, isArrayEmpty } from "~/lib";
 import { type MembersRecord } from "~/server/db";
 import { format } from "date-fns";
 
@@ -41,7 +43,7 @@ const memberSchema = z.object({
 });
 
 export const MembersForm = (props: Props) => {
-  const { data: genders, isLoading } = api.genders.getAll.useQuery();
+  const { data: genders, isLoading, error } = api.genders.getAll.useQuery();
 
   const form = useForm<z.infer<typeof memberSchema>>({
     resolver: zodResolver(memberSchema),
@@ -62,6 +64,8 @@ export const MembersForm = (props: Props) => {
   }
 
   if (isLoading) return <MembersFormSkeleton />;
+  if (error) return <ErrorData />;
+  if (!genders || isArrayEmpty(genders)) return <NoData />;
 
   return (
     <Form {...form}>
@@ -183,7 +187,7 @@ export const MembersFormSkeleton = () => {
           <InputSkeleton key={val} />
         ))}
       </div>
-      <Skeleton className="h-10 w-full" />
+      <ButtonSkeleton />
     </div>
   );
 };

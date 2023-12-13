@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import {
   ActionsButton,
   Button,
+  ErrorData,
+  NoData,
   PageWrapper,
   PageWrapperSkeleton,
   Skeleton,
@@ -20,7 +22,7 @@ type Props = {
 
 const Page = ({ params }: Props) => {
   const router = useRouter();
-  const { data, isLoading } = api.members.getById.useQuery({
+  const { data, isLoading, error } = api.members.getById.useQuery({
     id: params.memberId,
   });
 
@@ -45,7 +47,7 @@ const Page = ({ params }: Props) => {
     return (
       <PageWrapperSkeleton className="flex flex-col items-start gap-4">
         <ActionsButton actions={[]} />
-        <div className="flex w-full flex-col">
+        <div className="flex w-full flex-col gap-2">
           <Skeleton className="h-4 w-64" />
           <Skeleton className="h-4 w-64" />
           <Skeleton className="h-4 w-64" />
@@ -57,7 +59,7 @@ const Page = ({ params }: Props) => {
 
   return (
     <PageWrapper
-      className="flex flex-col items-start gap-4"
+      className="flex flex-grow flex-col items-start gap-4"
       title={`${data?.firstName} ${data?.lastName}`}
     >
       <ActionsButton
@@ -76,17 +78,23 @@ const Page = ({ params }: Props) => {
           </Button>,
         ]}
       />
-      <div className="flex flex-col">
-        <div>
-          Date of birth:{" "}
-          {data?.dateOfBirth
-            ? format(Date.parse(data?.dateOfBirth.toString()), "dd/MM/yyyy")
-            : "undefined"}
+      {error ? (
+        <ErrorData />
+      ) : !data ? (
+        <NoData />
+      ) : (
+        <div className="flex flex-col">
+          <div>
+            Date of birth:{" "}
+            {data?.dateOfBirth
+              ? format(Date.parse(data.dateOfBirth.toString()), "dd/MM/yyyy")
+              : "undefined"}
+          </div>
+          <div>Address: {data?.address ?? "undefined"}</div>
+          <div>Phone number: {data?.phoneNumber ?? "undefined"}</div>
+          <div>Gender: {data?.gender ? data?.gender?.name : "undefined"}</div>
         </div>
-        <div>Address: {data?.address ?? "undefined"}</div>
-        <div>Phone number: {data?.phoneNumber ?? "undefined"}</div>
-        <div>Gender: {data?.gender ? data?.gender?.name : "undefined"}</div>
-      </div>
+      )}
     </PageWrapper>
   );
 };
