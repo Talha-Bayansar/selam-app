@@ -7,6 +7,7 @@ import {
   PageWrapper,
   PaginationButton,
   NoData,
+  ActionsButton,
 } from "~/components";
 import { reducePages, routes } from "~/lib";
 import { MembersList } from "~/members";
@@ -31,9 +32,13 @@ const Page = () => {
       className="flex flex-grow flex-col items-start gap-4"
       title="Members"
     >
-      <Button asChild className="w-full md:w-auto">
-        <Link href={`${routes.members}/create`}>New member</Link>
-      </Button>
+      <ActionsButton
+        actions={[
+          <Button key="new-member" asChild className="w-full md:w-auto">
+            <Link href={`${routes.members}/create`}>New member</Link>
+          </Button>,
+        ]}
+      />
       {isLoading ? (
         <ListSkeleton />
       ) : !!members ? (
