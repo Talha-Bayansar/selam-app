@@ -6,6 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const isArrayEmpty = (array: unknown[]) => {
+  return array.length < 1;
+};
+
 export const generateArray = (size?: number) => {
   return [...Array(size ?? 20).keys()];
 };

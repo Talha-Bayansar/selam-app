@@ -8,3 +8,4 @@ export * from "./ListSkeleton";
 export * from "./DateRangeInput";
 export * from "./InputSkeleton";
 export * from "./ActionsButton";
+export * from "./ErrorData";

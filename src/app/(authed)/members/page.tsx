@@ -1,32 +1,9 @@
-"use client";
 import Link from "next/link";
-import React from "react";
-import {
-  Button,
-  ListSkeleton,
-  PageWrapper,
-  PaginationButton,
-  NoData,
-  ActionsButton,
-} from "~/components";
-import { reducePages, routes } from "~/lib";
-import { MembersList } from "~/members";
-import { type MembersRecord } from "~/server/db";
-import { api } from "~/trpc/react";
+import { Button, PageWrapper, ActionsButton } from "~/components";
+import { routes } from "~/lib";
+import { AllMembersPaginatedList } from "~/members";
 
 const Page = () => {
-  const { data, isLoading, fetchNextPage, isFetchingNextPage } =
-    api.members.getAll.useInfiniteQuery(
-      {},
-      {
-        getNextPageParam: (currentPage) => {
-          return currentPage.meta.page.cursor;
-        },
-      },
-    );
-
-  const members = data && reducePages(data?.pages);
-
   return (
     <PageWrapper
       className="flex flex-grow flex-col items-start gap-4"
@@ -39,20 +16,7 @@ const Page = () => {
           </Button>,
         ]}
       />
-      {isLoading ? (
-        <ListSkeleton />
-      ) : !!members ? (
-        <>
-          <MembersList members={members.records as MembersRecord[]} />
-          <PaginationButton
-            canLoadMore={members?.meta.page.more}
-            isLoading={isFetchingNextPage}
-            onClick={() => fetchNextPage()}
-          />
-        </>
-      ) : (
-        <NoData />
-      )}
+      <AllMembersPaginatedList />
     </PageWrapper>
   );
 };
