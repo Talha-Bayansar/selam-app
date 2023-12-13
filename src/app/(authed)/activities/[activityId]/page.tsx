@@ -8,6 +8,7 @@ import {
   PageWrapperSkeleton,
   NoData,
   Skeleton,
+  ActionsButton,
 } from "~/components";
 import { routes } from "~/lib";
 import { AttendeesList } from "~/members";
@@ -43,11 +44,7 @@ const Page = ({ params }: Props) => {
   if (isLoadingActivity)
     return (
       <PageWrapperSkeleton className="flex flex-col gap-4">
-        <div className="grid grid-cols-3 gap-4 md:max-w-lg">
-          <Skeleton className="h-10" />
-          <Skeleton className="h-10" />
-          <Skeleton className="h-10" />
-        </div>
+        <ActionsButton actions={[]} />
         <div className="flex flex-col gap-2">
           <Skeleton className="h-4 w-64" />
           <Skeleton className="h-4 w-64" />
@@ -58,25 +55,34 @@ const Page = ({ params }: Props) => {
     );
   if (!activity) return <NoData />;
   return (
-    <PageWrapper className="flex flex-col gap-4" title={activity.name!}>
-      <div className="grid grid-cols-3 gap-4 md:max-w-lg">
-        <Button asChild>
-          <Link href={`${routes.activities}/${params.activityId}/edit`}>
-            Edit
-          </Link>
-        </Button>
-        <Button asChild>
-          <Link
-            href={`${routes.activities}/${params.activityId}/add-attendees`}
+    <PageWrapper
+      className="flex flex-col items-start gap-4"
+      title={activity.name!}
+    >
+      <ActionsButton
+        actions={[
+          <Button key="edit-activity" asChild>
+            <Link href={`${routes.activities}/${params.activityId}/edit`}>
+              Edit activity
+            </Link>
+          </Button>,
+          <Button key="add-members" asChild>
+            <Link
+              href={`${routes.activities}/${params.activityId}/add-attendees`}
+            >
+              Add members
+            </Link>
+          </Button>,
+          <Button
+            key="delete-activity"
+            variant="destructive"
+            onClick={handleDelete}
           >
-            Add
-          </Link>
-        </Button>
-        <Button variant="destructive" onClick={handleDelete}>
-          Delete
-        </Button>
-      </div>
-      <div className="flex flex-col">
+            Delete activity
+          </Button>,
+        ]}
+      />
+      <div className="flex w-full flex-col">
         <div>
           Date:{" "}
           {activity.start
@@ -87,7 +93,7 @@ const Page = ({ params }: Props) => {
         <div>Department: {activity.department?.name ?? "undefined"}</div>
         <div>Category: {activity.category?.name ?? "undefined"}</div>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex w-full flex-col gap-4">
         <h2 className="text-2xl underline">Attendees</h2>
         <AttendeesList activityId={params.activityId} />
       </div>
