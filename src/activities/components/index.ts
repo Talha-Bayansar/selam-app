@@ -1,2 +1,2 @@
-export * from "./ActivitiesList";
+export * from "./AllActivitiesPagnatedList";
 export * from "./ActivitiesForm";

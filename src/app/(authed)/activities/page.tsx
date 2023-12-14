@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ActivitiesList } from "~/activities";
+import { AllActivitiesPaginatedList } from "~/activities";
 import { ActionsButton, Button, PageWrapper } from "~/components";
 import { routes } from "~/lib";
 
@@ -16,7 +16,7 @@ const Page = () => {
           </Button>,
         ]}
       />
-      <ActivitiesList />
+      <AllActivitiesPaginatedList />
     </PageWrapper>
   );
 };

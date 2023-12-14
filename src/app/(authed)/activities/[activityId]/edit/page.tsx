@@ -1,7 +1,12 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { ActivitiesForm, ActivitiesFormSkeleton } from "~/activities";
-import { PageWrapper, PageWrapperSkeleton, NoData } from "~/components";
+import {
+  PageWrapper,
+  PageWrapperSkeleton,
+  NoData,
+  ErrorData,
+} from "~/components";
 import { routes } from "~/lib";
 import { type ActivitiesRecord } from "~/server/db";
 import { api } from "~/trpc/react";
@@ -14,7 +19,7 @@ type Props = {
 
 const Page = ({ params }: Props) => {
   const router = useRouter();
-  const { data, isLoading } = api.activities.getById.useQuery({
+  const { data, isLoading, error } = api.activities.getById.useQuery({
     id: params.activityId,
   });
   const mutation = api.activities.edit.useMutation({
@@ -27,6 +32,7 @@ const Page = ({ params }: Props) => {
         <ActivitiesFormSkeleton />
       </PageWrapperSkeleton>
     );
+  if (error) return <ErrorData />;
   if (!data) return <NoData />;
   return (
     <PageWrapper className="flex flex-grow md:max-w-lg" title={data.name!}>

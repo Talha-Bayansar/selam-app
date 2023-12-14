@@ -4,13 +4,13 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
   Button,
-  ListTile,
-  ListTileSkeleton,
   PageWrapper,
-  PaginationButton,
   NoData,
+  ListSkeleton,
+  ErrorData,
 } from "~/components";
-import { cn, generateArray, reducePages, routes } from "~/lib";
+import { routes } from "~/lib";
+import { SelectMembersPaginatedList } from "~/members";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -21,21 +21,9 @@ type Props = {
 
 const Page = ({ params }: Props) => {
   const router = useRouter();
-  const {
-    data: membersData,
-    isLoading: isLoadingMembers,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = api.members.getAll.useInfiniteQuery(
-    {},
-    {
-      getNextPageParam: (currentPage) => currentPage.meta.page.cursor,
-    },
-  );
-  const { data: activityMembers, isLoading: isLoadingActivityMembers } =
-    api.members.getAllByActivityId.useQuery({
-      activityId: params.activityId,
-    });
+  const { data, isLoading, error } = api.members.getAllByActivityId.useQuery({
+    activityId: params.activityId,
+  });
   const mutation = api.activities.addMembers.useMutation({
     onSuccess: () =>
       router.replace(`${routes.activities}/${params.activityId}`),
@@ -44,11 +32,7 @@ const Page = ({ params }: Props) => {
   const [addedMemberIds, setAddedMemberIds] = useState<string[]>([]);
 
   const selectMember = (id: string) => {
-    if (
-      !activityMembers?.find(
-        (memberActivity) => memberActivity.member?.id === id,
-      )
-    ) {
+    if (!data?.find((memberActivity) => memberActivity.member?.id === id)) {
       if (addedMemberIds.includes(id)) {
         setAddedMemberIds((ids) => ids.filter((val) => val !== id));
       } else {
@@ -58,65 +42,45 @@ const Page = ({ params }: Props) => {
   };
 
   const selectedMembers = useMemo(() => {
-    const memberIdsActivity = activityMembers?.map((am) => am.member?.id);
+    const memberIdsActivity = data?.map((am) => am.member!.id);
     if (memberIdsActivity) return [...memberIdsActivity, ...addedMemberIds];
-  }, [addedMemberIds, activityMembers]);
-
-  const members = membersData && reducePages(membersData.pages);
+  }, [addedMemberIds, data]);
 
   return (
     <PageWrapper title="Add attendees">
-      {isLoadingMembers || isLoadingActivityMembers ? (
-        generateArray().map((v, i) => (
-          <ListTileSkeleton
-            key={v}
-            isLastItem={generateArray().length > i + 1}
+      <div className="flex flex-col gap-4">
+        <Button
+          className="md:max-w-lg"
+          onClick={() =>
+            mutation.mutate({
+              id: params.activityId,
+              addMemberIds: addedMemberIds,
+            })
+          }
+          disabled={
+            JSON.stringify(selectedMembers) ===
+              JSON.stringify(
+                data?.map((activityMember) => activityMember.member?.id),
+              ) ||
+            mutation.isLoading ||
+            isLoading
+          }
+        >
+          Add members
+        </Button>
+        {isLoading ? (
+          <ListSkeleton withSubtitle={false} />
+        ) : error ? (
+          <ErrorData />
+        ) : !selectedMembers ? (
+          <NoData />
+        ) : (
+          <SelectMembersPaginatedList
+            selectedMembers={selectedMembers}
+            onChange={selectMember}
           />
-        ))
-      ) : !membersData || !members || members.records.length < 1 ? (
-        <NoData />
-      ) : (
-        <div className="flex flex-col gap-4">
-          <Button
-            className="md:max-w-lg"
-            onClick={() =>
-              mutation.mutate({
-                id: params.activityId,
-                addMemberIds: addedMemberIds,
-              })
-            }
-            disabled={
-              JSON.stringify(selectedMembers) ===
-                JSON.stringify(
-                  activityMembers?.map(
-                    (activityMember) => activityMember.member?.id,
-                  ),
-                ) || mutation.isLoading
-            }
-          >
-            Add members
-          </Button>
-          <div className="flex flex-col">
-            {members?.records.map((member, i) => (
-              <ListTile
-                key={member.id}
-                className={cn({
-                  "text-primary [&>button]:hover:text-primary":
-                    selectedMembers?.includes(member.id),
-                })}
-                onClick={() => selectMember(member.id)}
-                title={`${member.firstName} ${member.lastName}`}
-                isLastItem={members.records.length > i + 1}
-              />
-            ))}
-          </div>
-          <PaginationButton
-            canLoadMore={members.meta.page.more}
-            isLoading={isFetchingNextPage}
-            onClick={() => fetchNextPage()}
-          />
-        </div>
-      )}
+        )}
+      </div>
     </PageWrapper>
   );
 };

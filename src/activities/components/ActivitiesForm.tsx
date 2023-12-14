@@ -14,7 +14,6 @@ import {
   Button,
   Input,
   Form,
-  Skeleton,
   DateRangeInput,
   Select,
   SelectContent,
@@ -22,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
   InputSkeleton,
+  ButtonSkeleton,
 } from "~/components";
 import { cn, generateArray } from "~/lib";
 import { type ActivitiesRecord } from "~/server/db";
@@ -214,7 +214,7 @@ export const ActivitiesFormSkeleton = () => {
           <InputSkeleton key={val} />
         ))}
       </div>
-      <Skeleton className="h-10 w-full" />
+      <ButtonSkeleton />
     </div>
   );
 };

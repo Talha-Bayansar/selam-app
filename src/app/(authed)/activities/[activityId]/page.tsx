@@ -9,9 +9,11 @@ import {
   NoData,
   Skeleton,
   ActionsButton,
+  ListSkeleton,
+  ErrorData,
 } from "~/components";
 import { routes } from "~/lib";
-import { AttendeesList } from "~/members";
+import { AttendeesPaginatedList } from "~/members";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -22,10 +24,9 @@ type Props = {
 
 const Page = ({ params }: Props) => {
   const router = useRouter();
-  const { data: activity, isLoading: isLoadingActivity } =
-    api.activities.getById.useQuery({
-      id: params.activityId,
-    });
+  const { data, isLoading, error } = api.activities.getById.useQuery({
+    id: params.activityId,
+  });
   const mutation = api.activities.deleteById.useMutation({
     onSuccess: () => router.replace(routes.activities),
   });
@@ -41,7 +42,7 @@ const Page = ({ params }: Props) => {
     }
   };
 
-  if (isLoadingActivity)
+  if (isLoading)
     return (
       <PageWrapperSkeleton className="flex flex-col gap-4">
         <ActionsButton actions={[]} />
@@ -49,16 +50,18 @@ const Page = ({ params }: Props) => {
           <Skeleton className="h-4 w-64" />
           <Skeleton className="h-4 w-64" />
           <Skeleton className="h-4 w-64" />
-          <Skeleton className="h-4 w-40" />
+        </div>
+        <div className="flex flex-col gap-4">
+          <Skeleton className="h-8 w-40" />
+          <ListSkeleton withSubtitle={false} />
         </div>
       </PageWrapperSkeleton>
     );
-  if (!activity) return <NoData />;
+  if (error) return <ErrorData />;
+  if (!data) return <NoData />;
+
   return (
-    <PageWrapper
-      className="flex flex-col items-start gap-4"
-      title={activity.name!}
-    >
+    <PageWrapper className="flex flex-col items-start gap-4" title={data.name!}>
       <ActionsButton
         actions={[
           <Button key="edit-activity" asChild>
@@ -85,17 +88,17 @@ const Page = ({ params }: Props) => {
       <div className="flex w-full flex-col">
         <div>
           Date:{" "}
-          {activity.start
-            ? format(new Date(activity.start), "dd/MM/yyyy")
+          {data.start
+            ? format(new Date(data.start), "dd/MM/yyyy")
             : "undefined"}
-          {activity.end && ` - ${format(new Date(activity.end), "dd/MM/yyyy")}`}
+          {data.end && ` - ${format(new Date(data.end), "dd/MM/yyyy")}`}
         </div>
-        <div>Department: {activity.department?.name ?? "undefined"}</div>
-        <div>Category: {activity.category?.name ?? "undefined"}</div>
+        <div>Department: {data.department?.name ?? "undefined"}</div>
+        <div>Category: {data.category?.name ?? "undefined"}</div>
       </div>
       <div className="flex w-full flex-col gap-4">
         <h2 className="text-2xl underline">Attendees</h2>
-        <AttendeesList activityId={params.activityId} />
+        <AttendeesPaginatedList activityId={params.activityId} />
       </div>
     </PageWrapper>
   );
