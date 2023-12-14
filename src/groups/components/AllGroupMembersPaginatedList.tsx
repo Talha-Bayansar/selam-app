@@ -13,8 +13,9 @@ import {
   SheetTitle,
   SheetTrigger,
   NoData,
+  ErrorData,
 } from "~/components";
-import { cn, reducePages } from "~/lib";
+import { cn, isArrayEmpty, reducePages } from "~/lib";
 import { type MembersGroupsRecord } from "~/server/db";
 import { api } from "~/trpc/react";
 
@@ -22,8 +23,8 @@ type Props = {
   groupId: string;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-export const GroupMembers = ({ groupId, ...props }: Props) => {
-  const { data, isLoading, fetchNextPage, isFetchingNextPage, refetch } =
+export const AllGroupMembersPaginatedList = ({ groupId, ...props }: Props) => {
+  const { data, isLoading, fetchNextPage, isFetchingNextPage, refetch, error } =
     api.members.getByGroupID.useInfiniteQuery(
       {
         groupId: groupId,
@@ -51,14 +52,17 @@ export const GroupMembers = ({ groupId, ...props }: Props) => {
     }
   };
 
+  if (isLoading) return <ListSkeleton />;
+  if (error) return <ErrorData />;
+
   const members = data && reducePages(data?.pages);
 
-  if (isLoading) return <ListSkeleton />;
+  if (!members || isArrayEmpty(members.records)) return <NoData />;
 
   return (
-    <div className={cn("w-full", props.className)}>
-      {members && members.records.length > 0 ? (
-        members.records.map((memberGroup, i) => (
+    <div className={cn("flex w-full flex-col gap-4", props.className)}>
+      <div className="flex w-full flex-col">
+        {members.records.map((memberGroup, i) => (
           <Sheet key={memberGroup.id}>
             <SheetTrigger asChild>
               <ListTile
@@ -92,14 +96,11 @@ export const GroupMembers = ({ groupId, ...props }: Props) => {
               </SheetFooter>
             </SheetContent>
           </Sheet>
-        ))
-      ) : (
-        <NoData />
-      )}
+        ))}
+      </div>
       <PaginationButton
         canLoadMore={members?.meta.page.more ?? false}
         isLoading={isFetchingNextPage}
-        className="mt-4"
         onClick={() => fetchNextPage()}
       />
     </div>

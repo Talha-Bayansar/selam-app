@@ -8,11 +8,15 @@ type Props = {
 };
 
 export const ListSkeleton = ({ size, withSubtitle = true }: Props) => {
-  return generateArray(size).map((_, i) => (
-    <ListTileSkeleton
-      key={i}
-      isLastItem={generateArray(size).length > i + 1}
-      hasSubtitle={withSubtitle}
-    />
-  ));
+  return (
+    <div className="flex w-full flex-col">
+      {generateArray(size).map((_, i) => (
+        <ListTileSkeleton
+          key={i}
+          isLastItem={generateArray(size).length > i + 1}
+          hasSubtitle={withSubtitle}
+        />
+      ))}
+    </div>
+  );
 };

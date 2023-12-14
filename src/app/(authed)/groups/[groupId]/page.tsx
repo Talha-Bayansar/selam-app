@@ -8,7 +8,7 @@ import {
   PageWrapper,
   PageWrapperSkeleton,
 } from "~/components";
-import { GroupMembers } from "~/groups";
+import { AllGroupMembersPaginatedList } from "~/groups";
 import { generateArray, routes } from "~/lib";
 import { api } from "~/trpc/react";
 
@@ -54,10 +54,7 @@ const Page = ({ params }: Props) => {
     );
   }
   return (
-    <PageWrapper
-      className="flex flex-col items-start gap-4"
-      title={group!.name!}
-    >
+    <PageWrapper className="items-start gap-4" title={group!.name!}>
       <ActionsButton
         actions={[
           <Button key="edit-group" asChild>
@@ -79,7 +76,7 @@ const Page = ({ params }: Props) => {
           </Button>,
         ]}
       />
-      <GroupMembers groupId={params.groupId} />
+      <AllGroupMembersPaginatedList groupId={params.groupId} />
     </PageWrapper>
   );
 };

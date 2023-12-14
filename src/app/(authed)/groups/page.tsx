@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ActionsButton, Button, PageWrapper } from "~/components";
-import { GroupsList } from "~/groups";
+import { AllGroupsPaginatedList } from "~/groups";
 import { routes } from "~/lib";
 
 const Page = () => {
@@ -13,7 +13,7 @@ const Page = () => {
           </Button>,
         ]}
       />
-      <GroupsList />
+      <AllGroupsPaginatedList />
     </PageWrapper>
   );
 };

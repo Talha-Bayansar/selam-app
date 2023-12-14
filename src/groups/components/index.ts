@@ -1,3 +1,4 @@
-export * from "./GroupsList";
+export * from "./AllGroupsPaginatedList";
 export * from "./GroupsForm";
-export * from "./GroupMembers";
+export * from "./AllGroupMembersPaginatedList";
+export * from "./EditGroupsForm";
