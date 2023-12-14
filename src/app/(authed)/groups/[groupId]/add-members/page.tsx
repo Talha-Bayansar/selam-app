@@ -3,13 +3,15 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
   Button,
-  ListTile,
-  ListTileSkeleton,
+  ButtonSkeleton,
+  ErrorData,
+  ListSkeleton,
+  NoData,
   PageWrapper,
   PageWrapperSkeleton,
-  PaginationButton,
 } from "~/components";
-import { cn, generateArray, reducePages, routes } from "~/lib";
+import { routes } from "~/lib";
+import { SelectMembersPaginatedList } from "~/members";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -19,36 +21,44 @@ type Props = {
 };
 
 const Page = ({ params }: Props) => {
-  const router = useRouter();
-  const { data: group, isLoading: groupIsLoading } =
-    api.groups.getById.useQuery({
-      id: params.groupId,
-    });
-  const { data: membersGroup, isLoading: membersGroupIsLoading } =
-    api.members.getAllByGroupID.useQuery({
-      groupId: params.groupId,
-    });
-  const {
-    data: membersPaginated,
-    isLoading: membersIsLoading,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = api.members.getAll.useInfiniteQuery(
-    {},
-    {
-      getNextPageParam: (currentPage) => currentPage.meta.page.cursor,
-    },
+  const { data, isLoading, error } = api.groups.getById.useQuery({
+    id: params.groupId,
+  });
+
+  if (isLoading)
+    return (
+      <PageWrapperSkeleton className="flex flex-col gap-4">
+        <ButtonSkeleton />
+        <ListSkeleton withSubtitle={false} />
+      </PageWrapperSkeleton>
+    );
+  if (error) return <ErrorData />;
+  if (!data) return <NoData />;
+
+  return (
+    <PageWrapper className="flex flex-col items-start gap-4" title={data.name!}>
+      <Body groupId={params.groupId} />
+    </PageWrapper>
   );
+};
+
+const Body = ({ groupId }: { groupId: string }) => {
+  const router = useRouter();
+
+  const { data, isLoading, error } = api.members.getAllByGroupID.useQuery({
+    groupId: groupId,
+  });
+
   const mutation = api.groups.addMembers.useMutation({
     onSuccess: () => {
-      router.replace(`${routes.groups}/${params.groupId}`);
+      router.replace(`${routes.groups}/${groupId}`);
     },
   });
 
   const [addedMemberIds, setAddedMemberIds] = useState<string[]>([]);
 
   const selectMember = (id: string) => {
-    if (!membersGroup?.find((memberGroup) => memberGroup.member?.id === id)) {
+    if (!data?.find((memberGroup) => memberGroup.member?.id === id)) {
       if (addedMemberIds.includes(id)) {
         setAddedMemberIds((ids) => ids.filter((val) => val !== id));
       } else {
@@ -58,75 +68,45 @@ const Page = ({ params }: Props) => {
   };
 
   const selectedMembers = useMemo(() => {
-    const memberIdsGroup = membersGroup?.map((mg) => mg.member!.id);
+    const memberIdsGroup = data?.map((mg) => mg.member!.id);
     if (memberIdsGroup) return [...memberIdsGroup, ...addedMemberIds];
-  }, [addedMemberIds, membersGroup]);
+  }, [addedMemberIds, data]);
 
-  const members = membersPaginated && reducePages(membersPaginated.pages);
-
-  if (groupIsLoading)
+  if (isLoading)
     return (
-      <PageWrapperSkeleton className="flex flex-col gap-4">
-        <Button>Add members</Button>
-        {generateArray(20).map((item, i) => (
-          <ListTileSkeleton
-            key={item}
-            isLastItem={generateArray(20).length > i + 1}
-          />
-        ))}
-        <PaginationButton canLoadMore={false} isLoading={false} />
-      </PageWrapperSkeleton>
+      <>
+        <ButtonSkeleton />
+        <ListSkeleton withSubtitle={false} />
+      </>
     );
 
+  if (error) return <ErrorData />;
+  if (!selectedMembers || !data) return <NoData />;
+
   return (
-    <PageWrapper
-      className="flex flex-col items-start gap-4"
-      title={group!.name!}
-    >
+    <>
       <Button
         className="w-full md:w-auto"
         onClick={() =>
           mutation.mutate({
-            groupId: params.groupId,
+            groupId: groupId,
             addMemberIds: addedMemberIds,
           })
         }
         disabled={
           JSON.stringify(selectedMembers) ===
-            JSON.stringify(
-              membersGroup?.map((memberGroup) => memberGroup.member?.id),
-            ) || mutation.isLoading
+            JSON.stringify(data.map((memberGroup) => memberGroup.member?.id)) ||
+          mutation.isLoading
         }
       >
         Add members
       </Button>
-      <div className="flex w-full flex-col">
-        {membersIsLoading || membersGroupIsLoading
-          ? generateArray(20).map((item, i) => (
-              <ListTileSkeleton
-                key={item}
-                isLastItem={generateArray(20).length > i + 1}
-              />
-            ))
-          : members?.records.map((member, i) => (
-              <ListTile
-                key={member.id}
-                className={cn({
-                  "text-primary [&>button]:hover:text-primary":
-                    selectedMembers?.includes(member.id),
-                })}
-                onClick={() => selectMember(member.id)}
-                title={`${member.firstName} ${member.lastName}`}
-                isLastItem={members.records.length > i + 1}
-              />
-            ))}
-      </div>
-      <PaginationButton
-        canLoadMore={members?.meta.page.more ?? false}
-        isLoading={isFetchingNextPage}
-        onClick={() => fetchNextPage()}
+
+      <SelectMembersPaginatedList
+        selectedMembers={selectedMembers}
+        onChange={selectMember}
       />
-    </PageWrapper>
+    </>
   );
 };
 
