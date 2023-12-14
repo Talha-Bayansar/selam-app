@@ -12,9 +12,9 @@ const withPWA = withPWAInit({
   },
   fallbacks: {
     // Failed page requests fallback to this.
-    document: "/_offline",
+    document: "/offline",
   },
-  // ... other options you like
+  cacheStartUrl: true,
 });
 
 /** @type {import('next').NextConfig} */
