@@ -12,7 +12,7 @@ const withPWA = withPWAInit({
   },
   fallbacks: {
     // Failed page requests fallback to this.
-    document: "/~offline",
+    document: "/_offline",
   },
   // ... other options you like
 });
