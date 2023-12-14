@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import {
   ActionsButton,
   Button,
+  ErrorData,
+  ListSkeleton,
+  NoData,
   PageWrapper,
   PageWrapperSkeleton,
 } from "~/components";
@@ -18,7 +21,7 @@ type Props = {
 
 const Page = ({ params }: Props) => {
   const router = useRouter();
-  const { data, isLoading } = api.departments.getById.useQuery({
+  const { data, isLoading, error } = api.departments.getById.useQuery({
     id: params.departmentId,
   });
   const mutation = api.departments.deleteById.useMutation({
@@ -42,11 +45,16 @@ const Page = ({ params }: Props) => {
     return (
       <PageWrapperSkeleton className="flex flex-col items-start gap-4">
         <ActionsButton actions={[]} />
+        <ListSkeleton withSubtitle={false} />
       </PageWrapperSkeleton>
     );
 
+  if (error) return <ErrorData />;
+
+  if (!data) return <NoData />;
+
   return (
-    <PageWrapper className="flex flex-col items-start gap-4" title={data!.name}>
+    <PageWrapper className="flex flex-col items-start gap-4" title={data.name}>
       <ActionsButton
         actions={[
           <Button key="edit-department" asChild>

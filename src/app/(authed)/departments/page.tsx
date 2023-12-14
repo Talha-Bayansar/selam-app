@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ActionsButton, Button, PageWrapper } from "~/components";
-import { DepartmentsList } from "~/departments";
+import { AllDepartmentsPaginatedList } from "~/departments";
 import { routes } from "~/lib";
 
 const Page = () => {
@@ -16,7 +16,7 @@ const Page = () => {
           </Button>,
         ]}
       />
-      <DepartmentsList />
+      <AllDepartmentsPaginatedList />
     </PageWrapper>
   );
 };

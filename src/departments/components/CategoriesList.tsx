@@ -3,7 +3,6 @@ import Link from "next/link";
 import {
   Button,
   ListTile,
-  ListTileSkeleton,
   Sheet,
   SheetClose,
   SheetContent,
@@ -12,8 +11,10 @@ import {
   SheetTitle,
   SheetTrigger,
   NoData,
+  ListSkeleton,
+  ErrorData,
 } from "~/components";
-import { generateArray, routes } from "~/lib";
+import { cn, isArrayEmpty, routes } from "~/lib";
 import { type CategoriesRecord } from "~/server/db";
 import { api } from "~/trpc/react";
 
@@ -22,7 +23,7 @@ type Props = {
 } & React.HTMLAttributes<HTMLDivElement>;
 
 export const CategoriesList = ({ departmentId, ...props }: Props) => {
-  const { data, isLoading } = api.categories.getByDepartmentId.useQuery({
+  const { data, isLoading, error } = api.categories.getByDepartmentId.useQuery({
     departmentId,
   });
   const mutation = api.categories.deleteById.useMutation();
@@ -38,22 +39,14 @@ export const CategoriesList = ({ departmentId, ...props }: Props) => {
     }
   };
 
-  if (isLoading)
-    return (
-      <div {...props}>
-        {generateArray().map((val, i) => (
-          <ListTileSkeleton
-            key={val}
-            isLastItem={generateArray().length > i + 1}
-          />
-        ))}
-      </div>
-    );
+  if (isLoading) return <ListSkeleton withSubtitle={false} />;
 
-  if (!data || data.length <= 0) return <NoData />;
+  if (error) return <ErrorData />;
+
+  if (!data || isArrayEmpty(data)) return <NoData />;
 
   return (
-    <div {...props}>
+    <div {...props} className={cn("flex w-full flex-col", props.className)}>
       {data.map((category, i) => (
         <Sheet key={category.id}>
           <SheetTrigger asChild>

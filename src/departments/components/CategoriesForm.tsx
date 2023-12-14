@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
   Button,
+  ButtonSkeleton,
   Form,
   FormControl,
   FormField,
@@ -11,7 +12,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  Skeleton,
+  InputSkeleton,
 } from "~/components";
 import { cn } from "~/lib";
 import { type CategoriesRecord } from "~/server/db";
@@ -72,11 +73,8 @@ export const CategoriesForm = ({ category, ...props }: Props) => {
 export const CategoriesFormSkeleton = () => {
   return (
     <div className="flex flex-grow flex-col justify-between gap-8 md:justify-normal">
-      <div className="flex w-full flex-col gap-4">
-        <Skeleton className="h-4 w-16" />
-        <Skeleton className="h-10 w-full" />
-      </div>
-      <Skeleton className="h-10 w-full" />
+      <InputSkeleton />
+      <ButtonSkeleton />
     </div>
   );
 };

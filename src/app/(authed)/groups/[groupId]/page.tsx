@@ -4,12 +4,12 @@ import { useRouter } from "next/navigation";
 import {
   ActionsButton,
   Button,
-  ListTileSkeleton,
+  ListSkeleton,
   PageWrapper,
   PageWrapperSkeleton,
 } from "~/components";
 import { AllGroupMembersPaginatedList } from "~/groups";
-import { generateArray, routes } from "~/lib";
+import { routes } from "~/lib";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -43,13 +43,7 @@ const Page = ({ params }: Props) => {
     return (
       <PageWrapperSkeleton className="flex flex-col gap-4">
         <ActionsButton actions={[]} />
-        {generateArray().map((val, i) => (
-          <ListTileSkeleton
-            key={val}
-            isLastItem={generateArray().length > i + 1}
-            hasSubtitle
-          />
-        ))}
+        <ListSkeleton />
       </PageWrapperSkeleton>
     );
   }

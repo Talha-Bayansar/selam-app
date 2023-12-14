@@ -12,7 +12,8 @@ import {
   Button,
   Input,
   Form,
-  Skeleton,
+  ButtonSkeleton,
+  InputSkeleton,
 } from "~/components";
 import { cn } from "~/lib";
 import { type DepartmentsRecord } from "~/server/db";
@@ -74,11 +75,8 @@ export const DepartmentsForm = (props: Props) => {
 export const DepartmentsFormSkeleton = () => {
   return (
     <div className="flex flex-grow flex-col justify-between gap-8 md:justify-normal">
-      <div className="flex w-full flex-col gap-4">
-        <Skeleton className="h-4 w-16" />
-        <Skeleton className="h-10 w-full" />
-      </div>
-      <Skeleton className="h-10 w-full" />
+      <InputSkeleton />
+      <ButtonSkeleton />
     </div>
   );
 };
