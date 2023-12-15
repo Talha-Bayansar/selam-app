@@ -1,0 +1,19 @@
+{
+  "id": "mig_clu61ljceum8tu1f3a60",
+  "parentID": "mig_cls2ke0n92nsbftmfdug",
+  "checksum": "1:f394b9d301db5cfd108487102e39dd54ba83ee346ac8af32e8a96b6e68970e6a",
+  "operations": [
+    {
+      "addColumn": {
+        "column": {
+          "name": "group",
+          "type": "link",
+          "link": {
+            "table": "groups"
+          }
+        },
+        "table": "activities"
+      }
+    }
+  ]
+}

@@ -121,7 +121,10 @@ const tables = [
       { name: "name", type: "string", unique: true },
       { name: "organization", type: "link", link: { table: "organisations" } },
     ],
-    revLinks: [{ column: "group", table: "members_groups" }],
+    revLinks: [
+      { column: "group", table: "members_groups" },
+      { column: "group", table: "activities" },
+    ],
   },
   {
     name: "genders",
@@ -172,6 +175,7 @@ const tables = [
       { name: "end", type: "datetime" },
       { name: "department", type: "link", link: { table: "departments" } },
       { name: "category", type: "link", link: { table: "categories" } },
+      { name: "group", type: "link", link: { table: "groups" } },
     ],
     revLinks: [{ column: "activity", table: "members_activities" }],
   },
