@@ -93,10 +93,11 @@ const Page = ({ params }: Props) => {
             : "undefined"}
           {data.end && ` - ${format(new Date(data.end), "dd/MM/yyyy")}`}
         </div>
+        <div>Group: {data.group?.name ?? "undefined"}</div>
         <div>Department: {data.department?.name ?? "undefined"}</div>
         <div>Category: {data.category?.name ?? "undefined"}</div>
       </div>
-      <div className="flex w-full flex-col gap-4">
+      <div className="flex w-full flex-grow flex-col gap-4">
         <h2 className="text-2xl underline">Attendees</h2>
         <AttendeesPaginatedList activityId={params.activityId} />
       </div>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 "use client";
 import { useRouter } from "next/navigation";
@@ -8,9 +9,10 @@ import {
   NoData,
   ListSkeleton,
   ErrorData,
+  ListTile,
+  PaginationButton,
 } from "~/components";
-import { routes } from "~/lib";
-import { SelectMembersPaginatedList } from "~/members";
+import { cn, isArrayEmpty, reducePages, routes } from "~/lib";
 import { api } from "~/trpc/react";
 
 type Props = {
@@ -21,6 +23,13 @@ type Props = {
 
 const Page = ({ params }: Props) => {
   const router = useRouter();
+  const {
+    data: activity,
+    isLoading: isLoadingActivity,
+    error: errorActivity,
+  } = api.activities.getById.useQuery({
+    id: params.activityId,
+  });
   const { data, isLoading, error } = api.members.getAllByActivityId.useQuery({
     activityId: params.activityId,
   });
@@ -68,20 +77,76 @@ const Page = ({ params }: Props) => {
         >
           Add members
         </Button>
-        {isLoading ? (
+        {isLoading || isLoadingActivity ? (
           <ListSkeleton withSubtitle={false} />
-        ) : error ? (
+        ) : error || errorActivity ? (
           <ErrorData />
-        ) : !selectedMembers ? (
+        ) : !selectedMembers || !activity ? (
           <NoData />
         ) : (
-          <SelectMembersPaginatedList
-            selectedMembers={selectedMembers}
+          <MembersList
+            groupId={activity.group!.id}
             onChange={selectMember}
+            selectedMembers={selectedMembers}
           />
         )}
       </div>
     </PageWrapper>
+  );
+};
+
+type MembersListProps = {
+  groupId: string;
+  className?: string;
+  selectedMembers: string[];
+  onChange: (memberId: string) => unknown;
+};
+
+const MembersList = ({
+  groupId,
+  className,
+  selectedMembers,
+  onChange,
+}: MembersListProps) => {
+  const { data, isLoading, error, fetchNextPage, isFetchingNextPage } =
+    api.members.getByGroupID.useInfiniteQuery(
+      {
+        groupId,
+      },
+      {
+        getNextPageParam: (currentPage) => currentPage.meta.page.cursor,
+      },
+    );
+
+  if (isLoading) return <ListSkeleton withSubtitle={false} />;
+  if (error) return <ErrorData />;
+
+  const membersGroup = data && reducePages(data.pages);
+
+  if (!membersGroup || isArrayEmpty(membersGroup.records)) return <NoData />;
+
+  return (
+    <div className={cn("flex w-full flex-col gap-4", className)}>
+      <div className="flex w-full flex-col">
+        {membersGroup.records.map((memberGroup, i) => (
+          <ListTile
+            key={memberGroup.id}
+            className={cn({
+              "text-primary [&>button]:hover:text-primary":
+                selectedMembers.includes(memberGroup.id),
+            })}
+            onClick={() => onChange(memberGroup.id)}
+            title={`${memberGroup.member?.firstName} ${memberGroup.member?.lastName}`}
+            isLastItem={membersGroup.records.length > i + 1}
+          />
+        ))}
+      </div>
+      <PaginationButton
+        canLoadMore={membersGroup.meta.page.more}
+        isLoading={isFetchingNextPage}
+        onClick={() => fetchNextPage()}
+      />
+    </div>
   );
 };
 

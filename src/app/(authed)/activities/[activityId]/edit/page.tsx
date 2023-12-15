@@ -43,6 +43,7 @@ const Page = ({ params }: Props) => {
           mutation.mutate({
             id: params.activityId,
             departmentId: values.department,
+            groupId: values.group,
             name: values.name,
             categoryId: values.category,
             start: values.start,
