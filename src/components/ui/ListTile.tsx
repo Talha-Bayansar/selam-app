@@ -31,8 +31,14 @@ export const ListTile = ({
           </Link>
         ) : (
           <>
-            <div className="text-lg">{title}</div>
-            {subtitle && <span className="text-xs">{subtitle}</span>}
+            <div className="w-full overflow-hidden text-ellipsis text-start text-lg">
+              {title}
+            </div>
+            {subtitle && (
+              <span className="w-full overflow-hidden text-ellipsis text-start text-xs">
+                {subtitle}
+              </span>
+            )}
           </>
         )}
       </Button>

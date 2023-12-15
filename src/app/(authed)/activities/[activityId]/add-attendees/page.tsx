@@ -133,9 +133,9 @@ const MembersList = ({
             key={memberGroup.id}
             className={cn({
               "text-primary [&>button]:hover:text-primary":
-                selectedMembers.includes(memberGroup.id),
+                selectedMembers.includes(memberGroup.member!.id),
             })}
-            onClick={() => onChange(memberGroup.id)}
+            onClick={() => onChange(memberGroup.member!.id)}
             title={`${memberGroup.member?.firstName} ${memberGroup.member?.lastName}`}
             isLastItem={membersGroup.records.length > i + 1}
           />
