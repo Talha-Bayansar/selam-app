@@ -2,6 +2,7 @@
 
 import { LayoutGrid, Loader2, type LucideIcon, Settings } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { type ReactNode } from "react";
@@ -67,7 +68,14 @@ export default function AuthLayout({ children }: Props) {
   switch (session.status) {
     case "loading":
       return (
-        <div className="grid grow place-items-center">
+        <div className="flex flex-grow flex-col items-center justify-center gap-4">
+          <Image
+            priority
+            src="/icon.svg"
+            alt="Selam Jongeren logo"
+            width={250}
+            height={250}
+          />
           <Loader2 size={40} className="animate-spin text-primary" />
         </div>
       );
