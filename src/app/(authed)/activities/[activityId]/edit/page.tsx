@@ -23,7 +23,8 @@ const Page = ({ params }: Props) => {
     id: params.activityId,
   });
   const mutation = api.activities.edit.useMutation({
-    onSuccess: () => router.replace(routes.activities),
+    onSuccess: () =>
+      router.replace(`${routes.activities}/${params.activityId}`),
   });
 
   if (isLoading)
@@ -35,7 +36,7 @@ const Page = ({ params }: Props) => {
   if (error) return <ErrorData />;
   if (!data) return <NoData />;
   return (
-    <PageWrapper className="flex flex-grow md:max-w-lg" title={data.name!}>
+    <PageWrapper className="flex flex-grow md:max-w-lg" title="Edit activity">
       <ActivitiesForm
         isSubmitting={mutation.isLoading}
         activity={data as ActivitiesRecord}
