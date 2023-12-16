@@ -6,13 +6,14 @@ import { cookies } from "next/headers";
 import { TRPCReactProvider } from "~/trpc/react";
 import { NextAuthProvider } from "~/components";
 import { cn } from "~/lib";
+import { type Metadata } from "next";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Selam",
   description: "Official Selam Application",
   generator: "Next.js",
@@ -25,6 +26,11 @@ export const metadata = {
       url: "https://www.linkedin.com/in/talha-bayansar-17039a19a/",
     },
   ],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    startupImage: "/apple-icon.png",
+  },
 };
 
 export const viewport = {
@@ -46,7 +52,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "bg-background min-h-screen font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased",
           fontSans.variable,
         )}
       >
