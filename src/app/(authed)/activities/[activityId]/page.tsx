@@ -11,6 +11,8 @@ import {
   ActionsButton,
   ListSkeleton,
   ErrorData,
+  DataTile,
+  DataTileSkeleton,
 } from "~/components";
 import { routes } from "~/lib";
 import { AttendeesPaginatedList } from "~/members";
@@ -47,9 +49,10 @@ const Page = ({ params }: Props) => {
       <PageWrapperSkeleton className="flex flex-col gap-4">
         <ActionsButton actions={[]} />
         <div className="flex flex-col gap-2">
-          <Skeleton className="h-4 w-64" />
-          <Skeleton className="h-4 w-64" />
-          <Skeleton className="h-4 w-64" />
+          <DataTileSkeleton />
+          <DataTileSkeleton />
+          <DataTileSkeleton />
+          <DataTileSkeleton />
         </div>
         <div className="flex flex-col gap-4">
           <Skeleton className="h-8 w-40" />
@@ -86,16 +89,17 @@ const Page = ({ params }: Props) => {
         ]}
       />
       <div className="flex w-full flex-col">
-        <div>
-          Date:{" "}
-          {data.start
-            ? format(new Date(data.start), "dd/MM/yyyy")
-            : "undefined"}
-          {data.end && ` - ${format(new Date(data.end), "dd/MM/yyyy")}`}
-        </div>
-        <div>Group: {data.group?.name ?? "undefined"}</div>
-        <div>Department: {data.department?.name ?? "undefined"}</div>
-        <div>Category: {data.category?.name ?? "undefined"}</div>
+        <DataTile
+          label="Date"
+          value={
+            data.start &&
+            `${format(new Date(data.start), "dd/MM/yyyy")}
+          ${data.end && ` - ${format(new Date(data.end), "dd/MM/yyyy")}`}`
+          }
+        />
+        <DataTile label="Group" value={data.group?.name} />
+        <DataTile label="Department" value={data.department?.name} />
+        <DataTile label="Category" value={data.category?.name} />
       </div>
       <div className="flex w-full flex-grow flex-col gap-4">
         <h2 className="text-2xl underline">Attendees</h2>

@@ -11,3 +11,4 @@ export * from "./popover";
 export * from "./calendar";
 export * from "./ListTile";
 export * from "./PaginationButton";
+export * from "./DataTile";

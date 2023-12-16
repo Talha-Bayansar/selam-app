@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import {
   ActionsButton,
   Button,
+  DataTile,
+  DataTileSkeleton,
   ErrorData,
   NoData,
   PageWrapper,
   PageWrapperSkeleton,
-  Skeleton,
 } from "~/components";
 import { routes } from "~/lib";
 import { api } from "~/trpc/react";
@@ -47,11 +48,11 @@ const Page = ({ params }: Props) => {
     return (
       <PageWrapperSkeleton className="flex flex-col items-start gap-4">
         <ActionsButton actions={[]} />
-        <div className="flex w-full flex-col gap-2">
-          <Skeleton className="h-4 w-64" />
-          <Skeleton className="h-4 w-64" />
-          <Skeleton className="h-4 w-64" />
-          <Skeleton className="h-4 w-40" />
+        <div className="flex w-full flex-col">
+          <DataTileSkeleton />
+          <DataTileSkeleton />
+          <DataTileSkeleton />
+          <DataTileSkeleton isLastItem />
         </div>
       </PageWrapperSkeleton>
     );
@@ -83,16 +84,17 @@ const Page = ({ params }: Props) => {
       ) : !data ? (
         <NoData />
       ) : (
-        <div className="flex flex-col">
-          <div>
-            Date of birth:{" "}
-            {data?.dateOfBirth
-              ? format(Date.parse(data.dateOfBirth.toString()), "dd/MM/yyyy")
-              : "undefined"}
-          </div>
-          <div>Address: {data?.address ?? "undefined"}</div>
-          <div>Phone number: {data?.phoneNumber ?? "undefined"}</div>
-          <div>Gender: {data?.gender ? data?.gender?.name : "undefined"}</div>
+        <div className="flex w-full flex-col">
+          <DataTile
+            label="Date of birth"
+            value={
+              data?.dateOfBirth &&
+              format(Date.parse(data.dateOfBirth.toString()), "dd/MM/yyyy")
+            }
+          />
+          <DataTile label="Address" value={data?.address} />
+          <DataTile label="Phone number" value={data?.phoneNumber} />
+          <DataTile label="Gender" value={data?.gender?.name} isLastItem />
         </div>
       )}
     </PageWrapper>
