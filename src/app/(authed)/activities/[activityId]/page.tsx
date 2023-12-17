@@ -52,7 +52,7 @@ const Page = ({ params }: Props) => {
           <DataTileSkeleton />
           <DataTileSkeleton />
           <DataTileSkeleton />
-          <DataTileSkeleton />
+          <DataTileSkeleton isLastItem />
         </div>
         <div className="flex flex-col gap-4">
           <Skeleton className="h-8 w-40" />
@@ -99,7 +99,7 @@ const Page = ({ params }: Props) => {
         />
         <DataTile label="Group" value={data.group?.name} />
         <DataTile label="Department" value={data.department?.name} />
-        <DataTile label="Category" value={data.category?.name} />
+        <DataTile isLastItem label="Category" value={data.category?.name} />
       </div>
       <div className="flex w-full flex-grow flex-col gap-4">
         <h2 className="text-2xl underline">Attendees</h2>
