@@ -94,7 +94,7 @@ const Page = ({ params }: Props) => {
           value={
             data.start &&
             `${format(new Date(data.start), "dd/MM/yyyy")}
-          ${data.end && ` - ${format(new Date(data.end), "dd/MM/yyyy")}`}`
+          ${data.end ? ` - ${format(new Date(data.end), "dd/MM/yyyy")}` : ""}`
           }
         />
         <DataTile label="Group" value={data.group?.name} />
