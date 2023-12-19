@@ -7,6 +7,7 @@ import {
   categoryRouter,
   departmentRouter,
   activityRouter,
+  overviewRouter,
 } from "./routers";
 
 /**
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
   departments: departmentRouter,
   categories: categoryRouter,
   activities: activityRouter,
+  overview: overviewRouter,
 });
 
 // export type definition of API

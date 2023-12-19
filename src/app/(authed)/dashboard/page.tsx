@@ -4,6 +4,7 @@ import {
   Users,
   Cuboid,
   CalendarDays,
+  Table,
 } from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent, PageWrapper } from "~/components";
@@ -36,6 +37,11 @@ const Page = () => {
       name: "Activities",
       Icon: CalendarDays,
       href: routes.activities,
+    },
+    {
+      name: "Overview",
+      Icon: Table,
+      href: routes.overview,
     },
   ];
 

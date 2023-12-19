@@ -9,6 +9,7 @@ export * from "./select";
 export * from "./sheet";
 export * from "./popover";
 export * from "./calendar";
+export * from "./table";
 export * from "./ListTile";
 export * from "./PaginationButton";
 export * from "./DataTile";

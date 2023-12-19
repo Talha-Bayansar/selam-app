@@ -7,6 +7,7 @@ export const routes = {
   groups: "/groups",
   departments: "/departments",
   activities: "/activities",
+  overview: "/overview",
   organisations: "/organisations",
   noAccess: "/no-access",
 };
