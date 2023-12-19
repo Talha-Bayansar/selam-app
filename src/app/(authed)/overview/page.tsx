@@ -154,12 +154,12 @@ const DataTable = ({ data }: { data: TData[] }) => {
   );
 };
 
-export type TData = {
+type TData = {
   count: number;
   fullName: string;
 };
 
-export const columns: ColumnDef<TData>[] = [
+const columns: ColumnDef<TData>[] = [
   {
     accessorKey: "fullName",
     header: "Name",
