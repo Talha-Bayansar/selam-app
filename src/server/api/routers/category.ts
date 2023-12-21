@@ -11,6 +11,7 @@ export const categoryRouter = createTRPCRouter({
       .filter({
         "department.organisation.id": session.user.organisation?.id,
       })
+      .select(["*", "department.*"])
       .sort("name", "asc")
       .getMany();
 
@@ -20,7 +21,7 @@ export const categoryRouter = createTRPCRouter({
         message: "Could not get categories.",
       });
 
-    return response as CategoriesRecord[];
+    return response;
   }),
   getByDepartmentId: protectedProcedure
     .input(
