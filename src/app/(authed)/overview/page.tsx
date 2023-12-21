@@ -91,9 +91,6 @@ const Body = () => {
   if (isLoadingAttendance || (categoryId && isLoadingCategory))
     return (
       <div className="flex w-full flex-grow flex-col">
-        <Button variant="outline" disabled>
-          Filters
-        </Button>
         <div className="flex items-center justify-between space-x-2 py-4 md:justify-end">
           <Button variant="outline" size="sm" disabled>
             Previous
