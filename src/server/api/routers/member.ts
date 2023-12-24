@@ -61,7 +61,7 @@ export const memberRouter = createTRPCRouter({
   getByGroupID: protectedProcedure
     .input(
       z.object({
-        groupId: z.string().min(1),
+        groupId: z.string().optional(),
         size: z.number().min(1).max(100).optional(),
         cursor: z.string().optional(),
       }),

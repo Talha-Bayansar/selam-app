@@ -85,7 +85,7 @@ const Page = ({ params }: Props) => {
           <NoData />
         ) : (
           <MembersList
-            groupId={activity.group!.id}
+            groupId={activity.department?.group?.id}
             onChange={selectMember}
             selectedMembers={selectedMembers}
           />
@@ -96,7 +96,7 @@ const Page = ({ params }: Props) => {
 };
 
 type MembersListProps = {
-  groupId: string;
+  groupId?: string;
   className?: string;
   selectedMembers: string[];
   onChange: (memberId: string) => unknown;

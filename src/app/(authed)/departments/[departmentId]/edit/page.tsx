@@ -40,8 +40,8 @@ const Page = ({ params }: Props) => {
         department={data as DepartmentsRecord}
         onSubmit={(values) =>
           mutation.mutate({
+            ...values,
             id: params.departmentId,
-            name: values.name,
           })
         }
         isSubmitting={mutation.isLoading}

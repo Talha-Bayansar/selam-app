@@ -59,6 +59,7 @@ export const departmentRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string().min(1),
+        groupId: z.string().optional().nullable().default(null),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -66,6 +67,7 @@ export const departmentRouter = createTRPCRouter({
       if (!!session.user.organisation?.id) {
         const response = await xata.db.departments.create({
           name: input.name,
+          group: input.groupId,
           organisation: session.user.organisation?.id,
         });
 
@@ -90,6 +92,7 @@ export const departmentRouter = createTRPCRouter({
       z.object({
         id: z.string().min(1),
         name: z.string().min(1),
+        groupId: z.string().optional().nullable().default(null),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -97,6 +100,7 @@ export const departmentRouter = createTRPCRouter({
       const response = await xata.db.departments.update({
         id: input.id,
         name: input.name,
+        group: input.groupId,
         organisation: session.user.organisation?.id,
       });
 
