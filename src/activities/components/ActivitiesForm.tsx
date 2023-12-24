@@ -31,7 +31,6 @@ const formSchema = z.object({
   name: z.string().min(1, "Required"),
   start: z.string().min(1, "Required"),
   end: z.string().optional(),
-  group: z.string().min(1, "Required"),
   department: z.string().min(1, "Required"),
   category: z.string().optional(),
 });
@@ -46,10 +45,6 @@ type Props = {
 export const ActivitiesForm = (props: Props) => {
   const { data: departments, isLoading: isLoadingDepartments } =
     api.departments.getAll.useQuery({});
-  const { data: groups, isLoading: isLoadingGroups } =
-    api.groups.getAll.useQuery({
-      size: 100,
-    });
 
   const [date, setDate] = useState<DateRange | undefined>({
     from: props.activity?.start
@@ -69,7 +64,6 @@ export const ActivitiesForm = (props: Props) => {
       end: props.activity?.end
         ? new Date(props.activity.end.toString()).toISOString()
         : undefined,
-      group: props.activity?.group?.id ?? "",
       department: props.activity?.department?.id ?? "",
       category: props.activity?.category?.id ?? "",
     },
@@ -138,37 +132,6 @@ export const ActivitiesForm = (props: Props) => {
               setDate(date);
             }}
           />
-          {isLoadingGroups ? (
-            <InputSkeleton />
-          ) : (
-            <FormField
-              control={form.control}
-              name="group"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Group*</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a group" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {groups?.records.map((group) => (
-                          <SelectItem key={group.id} value={group.id}>
-                            {group.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
           {isLoadingDepartments ? (
             <InputSkeleton />
           ) : (

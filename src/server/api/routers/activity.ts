@@ -49,7 +49,7 @@ export const activityRouter = createTRPCRouter({
           id: input.id,
           "department.organisation.id": session.user.organisation?.id,
         })
-        .select(["*", "category.*", "department.*", "group.*"])
+        .select(["*", "category.*", "department.*"])
         .getFirst();
 
       if (!response)
@@ -95,7 +95,6 @@ export const activityRouter = createTRPCRouter({
     .input(
       z.object({
         departmentId: z.string().min(1),
-        groupId: z.string().min(1),
         name: z.string().min(1),
         start: z.string().min(1),
         end: z.string().optional(),
@@ -110,7 +109,6 @@ export const activityRouter = createTRPCRouter({
         end: input.end ? new Date(input.end) : null,
         category: input.categoryId ? input.categoryId : null,
         department: input.departmentId,
-        group: input.groupId,
       });
 
       if (!response)
@@ -126,7 +124,6 @@ export const activityRouter = createTRPCRouter({
       z.object({
         id: z.string().min(1),
         departmentId: z.string().min(1),
-        groupId: z.string().min(1),
         name: z.string().min(1),
         start: z.string().min(1),
         end: z.string().optional(),
@@ -142,7 +139,6 @@ export const activityRouter = createTRPCRouter({
         end: input.end ? new Date(input.end) : null,
         category: input.categoryId ? input.categoryId : null,
         department: input.departmentId,
-        group: input.groupId,
       });
 
       if (!response)

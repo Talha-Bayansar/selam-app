@@ -97,7 +97,6 @@ const Page = ({ params }: Props) => {
           ${data.end ? ` - ${format(new Date(data.end), "dd/MM/yyyy")}` : ""}`
           }
         />
-        <DataTile label="Group" value={data.group?.name} />
         <DataTile label="Department" value={data.department?.name} />
         <DataTile isLastItem label="Category" value={data.category?.name} />
       </div>

@@ -123,7 +123,7 @@ const tables = [
     ],
     revLinks: [
       { column: "group", table: "members_groups" },
-      { column: "group", table: "activities" },
+      { column: "group", table: "departments" },
     ],
   },
   {
@@ -148,6 +148,7 @@ const tables = [
         defaultValue: "undefined",
       },
       { name: "organisation", type: "link", link: { table: "organisations" } },
+      { name: "group", type: "link", link: { table: "groups" } },
     ],
     revLinks: [
       { column: "department", table: "categories" },
@@ -175,7 +176,6 @@ const tables = [
       { name: "end", type: "datetime" },
       { name: "department", type: "link", link: { table: "departments" } },
       { name: "category", type: "link", link: { table: "categories" } },
-      { name: "group", type: "link", link: { table: "groups" } },
     ],
     revLinks: [{ column: "activity", table: "members_activities" }],
   },

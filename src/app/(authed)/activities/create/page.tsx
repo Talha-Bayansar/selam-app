@@ -21,7 +21,6 @@ const Page = () => {
           mutation.mutate({
             departmentId: values.department,
             categoryId: values.category,
-            groupId: values.group,
             name: values.name,
             start: values.start,
             end: values.end,
