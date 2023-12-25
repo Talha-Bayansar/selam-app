@@ -26,7 +26,7 @@ import {
   SelectGroup,
   SelectLabel,
 } from "~/components";
-import { generateArray, routes } from "~/lib";
+import { generateArray } from "~/lib";
 import { api } from "~/trpc/react";
 import {
   type ColumnDef,
@@ -34,14 +34,14 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useOverviewParams } from "~/overview";
 
 const Page = () => {
   return (
-    <PageWrapper className="flex flex-col gap-4" title="Overview">
+    <PageWrapper className="flex flex-col items-start gap-4" title="Overview">
       <Dialog>
         <DialogTrigger>
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full md:w-auto">
             Filter
           </Button>
         </DialogTrigger>
@@ -58,22 +58,15 @@ const Page = () => {
 };
 
 const Body = () => {
-  const router = useRouter();
-  const params = useSearchParams();
-  const page = params.get("page") ? parseInt(params.get("page") ?? "1") : 1;
-  const categoryId = params.get("category")
-    ? params.get("category") !== "all"
-      ? params.get("category")
-      : undefined
-    : undefined;
+  const { page, categoryId, setParams } = useOverviewParams();
   const {
     data: attendance,
     isLoading: isLoadingAttendance,
     error: errorAttendance,
   } = api.overview.getAttendanceData.useQuery({
     size: 10,
-    offset: page && page > 1 ? (page - 1) * 10 : 0,
-    categoryId: categoryId as string | undefined,
+    offset: page > 1 ? (page - 1) * 10 : 0,
+    categoryId: categoryId,
   });
   const {
     data: category,
@@ -81,7 +74,7 @@ const Body = () => {
     error: errorCategory,
   } = api.categories.getById.useQuery(
     {
-      id: categoryId ?? "",
+      id: categoryId!,
     },
     {
       enabled: !!categoryId,
@@ -102,15 +95,18 @@ const Body = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>All</TableHead>
+              <TableHead>
+                <Skeleton className="h-5 w-full" />
+              </TableHead>
+              <TableHead>
+                <Skeleton className="h-5 w-full" />
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {generateArray(10).map((v) => (
               <TableRow key={v}>
                 <TableCell>
-                  {" "}
                   <Skeleton className="h-5 w-full" />
                 </TableCell>
                 <TableCell>
@@ -132,11 +128,10 @@ const Body = () => {
           variant="outline"
           size="sm"
           onClick={() =>
-            router.push(
-              `${routes.overview}?page=${page - 1}&category=${
-                categoryId ?? "all"
-              }`,
-            )
+            setParams({
+              page: `${page - 1}`,
+              category: categoryId,
+            })
           }
           disabled={page === 1}
         >
@@ -146,11 +141,10 @@ const Body = () => {
           variant="outline"
           size="sm"
           onClick={() =>
-            router.push(
-              `${routes.overview}?page=${page + 1}&category=${
-                categoryId ?? "all"
-              }`,
-            )
+            setParams({
+              page: `${page + 1}`,
+              category: categoryId,
+            })
           }
           disabled={!attendance.meta.page.more}
         >
@@ -163,9 +157,7 @@ const Body = () => {
 };
 
 const Filters = () => {
-  const params = useSearchParams();
-  const router = useRouter();
-  const category = params.get("category") ?? "all";
+  const { categoryId, setParams } = useOverviewParams();
   const { data, isLoading, error } = api.categories.getAll.useQuery();
 
   if (isLoading) return <InputSkeleton />;
@@ -188,9 +180,9 @@ const Filters = () => {
       </label>
       <Select
         onValueChange={(value) =>
-          router.push(`${routes.overview}?category=${value}`)
+          setParams({ category: value !== "all" ? value : undefined })
         }
-        defaultValue={category ?? ""}
+        defaultValue={categoryId ?? "all"}
       >
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select a category" />
